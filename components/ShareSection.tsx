@@ -10,7 +10,7 @@ export default function ShareSection() {
   }
 
   return (
-    <section className="px-6 py-12 bg-white">
+    <section className="px-6 py-12 bg-wedding-white">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -20,7 +20,7 @@ export default function ShareSection() {
       >
         <button
           onClick={shareToKakao}
-          className="inline-flex items-center px-6 py-3 space-x-2 font-medium text-black transition-colors bg-yellow-400 rounded-lg hover:bg-yellow-500"
+          className="inline-flex items-center px-6 py-3 space-x-2 font-medium text-wedding-white transition-colors bg-wedding-primary rounded-lg hover:bg-wedding-secondary"
         >
           <MessageCircle className="w-5 h-5" />
           <span>카카오톡으로 초대장 보내기</span>

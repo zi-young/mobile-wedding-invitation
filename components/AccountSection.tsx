@@ -33,7 +33,7 @@ export default function AccountSection() {
   }
 
   return (
-    <section className="px-6 py-12 bg-white">
+    <section className="px-6 py-12 bg-wedding-white">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -41,8 +41,8 @@ export default function AccountSection() {
         viewport={{ once: true }}
         className="mb-8 text-center"
       >
-        <div className="text-sm tracking-[3px] text-gray-500 mb-2">ACCOUNT</div>
-        <h2 className="text-xl font-medium text-gray-800">마음 전하실 곳</h2>
+        <div className="text-sm tracking-[3px] text-wedding-secondary mb-2">ACCOUNT</div>
+        <h2 className="text-xl font-medium text-wedding-primary">마음 전하실 곳</h2>
       </motion.div>
 
       <motion.div
@@ -53,33 +53,33 @@ export default function AccountSection() {
         className="space-y-4"
       >
         {/* Groom Side */}
-        <div className="overflow-hidden border border-gray-200 rounded-lg">
+        <div className="overflow-hidden border border-wedding-primary/20 rounded-lg">
           <button
             onClick={() => toggleSection("groom")}
-            className="flex items-center justify-between w-full px-4 py-3 transition-colors bg-gray-50 hover:bg-gray-100"
+            className="flex items-center justify-between w-full px-4 py-3 transition-colors"
           >
-            <span className="font-medium">신랑측</span>
-            <ChevronDown className={`w-5 h-5 transition-transform ${openSection === "groom" ? "rotate-180" : ""}`} />
+            <span className="font-medium text-wedding-primary">신랑측</span>
+            <ChevronDown className={`w-5 h-5 transition-transform text-wedding-primary ${openSection === "groom" ? "rotate-180" : ""}`} />
           </button>
           {openSection === "groom" && (
-            <div className="border-t border-gray-200">
+            <div className="border-t border-wedding-primary/20">
               {accounts.groom.map((account, index) => (
-                <div key={index} className="px-4 py-3 border-b border-gray-100 last:border-b-0">
+                <div key={index} className="px-4 py-3 border-b border-wedding-primary/10 last:border-b-0">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <span className="font-medium">{account.name}</span>
-                      <span className="text-sm text-gray-600">
+                      <span className="font-medium text-wedding-primary">{account.name}</span>
+                      <span className="text-sm text-wedding-secondary">
                         {account.bank} {account.number}
                       </span>
                     </div>
                     <button
                       onClick={() => copyToClipboard(`${account.bank} ${account.number}`, `groom-${index}`)}
-                      className="p-2 transition-colors rounded-full hover:bg-gray-100"
+                      className="p-2 transition-colors rounded-full hover:bg-wedding-light"
                     >
                       {copiedAccount === `groom-${index}` ? (
-                        <Check className="w-4 h-4 text-green-500" />
+                        <Check className="w-4 h-4 text-wedding-primary" />
                       ) : (
-                        <Copy className="w-4 h-4 text-gray-500" />
+                        <Copy className="w-4 h-4 text-wedding-secondary" />
                       )}
                     </button>
                   </div>
@@ -90,33 +90,33 @@ export default function AccountSection() {
         </div>
 
         {/* Bride Side */}
-        <div className="overflow-hidden border border-gray-200 rounded-lg">
+        <div className="overflow-hidden border border-wedding-primary/20 rounded-lg">
           <button
             onClick={() => toggleSection("bride")}
-            className="flex items-center justify-between w-full px-4 py-3 transition-colors bg-gray-50 hover:bg-gray-100"
+            className="flex items-center justify-between w-full px-4 py-3 transition-colors"
           >
-            <span className="font-medium">신부측</span>
-            <ChevronDown className={`w-5 h-5 transition-transform ${openSection === "bride" ? "rotate-180" : ""}`} />
+            <span className="font-medium text-wedding-primary">신부측</span>
+            <ChevronDown className={`w-5 h-5 transition-transform text-wedding-primary ${openSection === "bride" ? "rotate-180" : ""}`} />
           </button>
           {openSection === "bride" && (
-            <div className="border-t border-gray-200">
+            <div className="border-t border-wedding-primary/20">
               {accounts.bride.map((account, index) => (
-                <div key={index} className="px-4 py-3 border-b border-gray-100 last:border-b-0">
+                <div key={index} className="px-4 py-3 border-b border-wedding-primary/10 last:border-b-0">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <span className="font-medium">{account.name}</span>
-                      <span className="text-sm text-gray-600">
+                      <span className="font-medium text-wedding-primary">{account.name}</span>
+                      <span className="text-sm text-wedding-secondary">
                         {account.bank} {account.number}
                       </span>
                     </div>
                     <button
                       onClick={() => copyToClipboard(`${account.bank} ${account.number}`, `bride-${index}`)}
-                      className="p-2 transition-colors rounded-full hover:bg-gray-100"
+                      className="p-2 transition-colors rounded-full hover:bg-wedding-light"
                     >
                       {copiedAccount === `bride-${index}` ? (
-                        <Check className="w-4 h-4 text-green-500" />
+                        <Check className="w-4 h-4 text-wedding-primary" />
                       ) : (
-                        <Copy className="w-4 h-4 text-gray-500" />
+                        <Copy className="w-4 h-4 text-wedding-secondary" />
                       )}
                     </button>
                   </div>

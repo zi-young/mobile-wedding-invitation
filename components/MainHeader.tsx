@@ -23,8 +23,8 @@ export default function MainHeader() {
         }}
       />
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-20" />
+      {/* Overlay with new color theme */}
+      <div className="absolute inset-0 bg-gradient-to-b from-wedding-secondary/40 to-wedding-primary/60" />
 
       {/* Content */}
       <div className="relative z-10 flex flex-col justify-end h-full p-6 pb-8 text-white">
@@ -41,7 +41,7 @@ export default function MainHeader() {
                 y="50%"
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className="font-serif text-4xl italic"
+                className="font-serif text-4xl italic text-wedding-white drop-shadow-lg"
               >
                 Love
               </text>
@@ -53,7 +53,7 @@ export default function MainHeader() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1 }}
-          className="grid grid-cols-3 gap-4 text-xs tracking-[4px] uppercase font-light"
+          className="grid grid-cols-3 gap-4 text-xs tracking-[4px] uppercase font-light text-wedding-white"
         >
           <div className="flex justify-between">
             <span>IN</span>

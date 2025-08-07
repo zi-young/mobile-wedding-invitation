@@ -2,9 +2,9 @@
 
 export default function Footer() {
   return (
-    <footer className="px-6 py-8 text-center bg-gray-100">
-      <div className="text-xs text-gray-500">
-        Copyright© 2021. <span className="font-medium">TheIrMood</span> All rights reserved.
+    <footer className="px-6 py-8 text-center bg-wedding-secondary">
+      <div className="text-xs text-wedding-white">
+        Copyright© 2025.11.08 <span className="font-medium">만경 ♥ 희영</span> ~~
       </div>
     </footer>
   )

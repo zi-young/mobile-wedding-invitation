@@ -52,6 +52,14 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // 커스텀 색상 추가
+        wedding: {
+          primary: "#306650",
+          secondary: "#1D5945",
+          white: "#ffffff",
+          light: "#f8faf8",
+          dark: "#1a3d2e",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
