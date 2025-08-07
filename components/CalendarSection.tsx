@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Heart } from "lucide-react"
 
 export default function CalendarSection() {
   const [timeLeft, setTimeLeft] = useState({
@@ -42,7 +41,7 @@ export default function CalendarSection() {
 
     const calendar = []
     for (let i = 0; i < startDay; i++) {
-      calendar.push(<td key={`empty-${i}`} className="h-8"></td>)
+      calendar.push(<td key={`empty-${i}`}></td>)
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
@@ -55,71 +54,22 @@ export default function CalendarSection() {
       const isWeddingDay = day === 8
 
       calendar.push(
-        <td key={day} className="h-8 text-center align-middle">
-          <div className="relative flex items-center justify-center h-full">
-            {isWeddingDay ? (
-              <motion.div 
-                className="relative flex items-center justify-center w-8 h-8"
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ 
-                  duration: 0.8, 
-                  type: "spring",
-                  stiffness: 150,
-                  damping: 12
-                }}
-                whileHover={{ 
-                  scale: 1.15,
-                  rotate: 8,
-                  transition: { duration: 0.3 }
-                }}
-              >
-                {/* 테두리만 있는 하트 배경 */}
-                <motion.div 
-                  className="absolute inset-0 flex items-center justify-center"
-                  animate={{ 
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 5, 0]
-                  }}
-                  transition={{ 
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <Heart 
-                    className="w-8 h-8 text-red-500" 
-                    fill="none"
-                    strokeWidth={2}
-                  />
-                </motion.div>
-                {/* 날짜 텍스트 */}
-                <span className="relative z-10 text-red-500 font-bold text-sm">
-                  {day}
-                </span>
-              </motion.div>
-            ) : (
-              <motion.span
-                className={`flex items-center justify-center w-8 h-8 text-sm rounded-full transition-all duration-200
-                  ${isToday 
-                    ? "bg-wedding-secondary/20 text-wedding-secondary font-semibold ring-1 ring-wedding-secondary/30" 
-                    : "hover:bg-wedding-light hover:scale-110 hover:shadow-sm"
-                  }
-                `}
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.2 }}
-              >
-                {day}
-              </motion.span>
-            )}
-          </div>
+        <td key={day} className="py-1 text-center">
+          <span
+            className={`flex items-center justify-center w-9 h-9 text-sm rounded-full transition
+              ${isWeddingDay ? "bg-wedding-primary text-wedding-white font-bold shadow-md" : ""}
+              ${isToday ? "bg-wedding-secondary/20 text-wedding-secondary font-semibold" : "hover:bg-wedding-light"}
+            `}
+          >
+            {day}
+          </span>
         </td>,
       )
     }
 
     const weeks = []
     for (let i = 0; i < calendar.length; i += 7) {
-      weeks.push(<tr key={`week-${i / 7}`} className="h-8">{calendar.slice(i, i + 7)}</tr>)
+      weeks.push(<tr key={`week-${i / 7}`}>{calendar.slice(i, i + 7)}</tr>)
     }
 
     return weeks
@@ -134,10 +84,8 @@ export default function CalendarSection() {
         viewport={{ once: true }}
         className="mb-8 text-center"
       >
-        <div className="mb-2 text-3xl font-bold tracking-wide text-wedding-secondary">
-          2025.11.08
-        </div>
-        <div className="text-wedding-primary text-lg font-medium">토요일 오후 02시 30분</div>
+        <div className="mb-2 text-2xl font-semibold tracking-wide text-wedding-secondary">2025.11.08</div>
+        <div className="text-wedding-primary">토요일 오후 02시 30분</div>
       </motion.div>
 
       <motion.div
@@ -145,36 +93,22 @@ export default function CalendarSection() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
         viewport={{ once: true }}
-        className="flex justify-center mb-8"
+        className="p-6 mb-8 bg-wedding-white shadow-md rounded-xl border border-wedding-primary/20"
       >
-        <div className="w-80 h-80 bg-wedding-white shadow-xl rounded-2xl border-2 border-wedding-primary/30 backdrop-blur-sm p-6">
-          {/* 달력 헤더 */}
-          <motion.div 
-            className="mb-4 text-center"
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-xl font-bold text-wedding-primary mb-2">11월</h3>
-            <div className="w-12 h-0.5 bg-wedding-primary mx-auto rounded-full"></div>
-          </motion.div>
-
-          <table className="w-full">
-            <thead>
-              <tr className="h-8">
-                <th className="text-sm font-semibold text-red-500 pb-2">일</th>
-                <th className="text-sm font-semibold text-wedding-secondary pb-2">월</th>
-                <th className="text-sm font-semibold text-wedding-secondary pb-2">화</th>
-                <th className="text-sm font-semibold text-wedding-secondary pb-2">수</th>
-                <th className="text-sm font-semibold text-wedding-secondary pb-2">목</th>
-                <th className="text-sm font-semibold text-wedding-secondary pb-2">금</th>
-                <th className="text-sm font-semibold text-blue-500 pb-2">토</th>
-              </tr>
-            </thead>
-            <tbody className="text-sm text-wedding-primary">{generateCalendar()}</tbody>
-          </table>
-        </div>
+        <table className="w-full table-fixed">
+          <thead>
+            <tr className="text-sm text-wedding-secondary">
+              <th className="py-2 text-red-500">일</th>
+              <th className="py-2">월</th>
+              <th className="py-2">화</th>
+              <th className="py-2">수</th>
+              <th className="py-2">목</th>
+              <th className="py-2">금</th>
+              <th className="py-2 text-blue-500">토</th>
+            </tr>
+          </thead>
+          <tbody className="text-sm text-wedding-primary">{generateCalendar()}</tbody>
+        </table>
       </motion.div>
     </section>
   )

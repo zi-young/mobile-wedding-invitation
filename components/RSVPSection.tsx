@@ -17,8 +17,9 @@ export default function RSVPSection() {
     agreed: false,
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+  
     if (!formData.name.trim()) {
       alert("참석자 성함을 입력해주세요.")
       return
@@ -27,18 +28,48 @@ export default function RSVPSection() {
       alert("개인정보 수집 및 이용에 동의해주세요.")
       return
     }
-
-    alert("참석의사를 전달 완료 했습니다.")
-    setShowModal(false)
-    setFormData({
-      attendance: "true",
-      side: "bride",
-      name: "",
-      guestCount: "1",
-      companions: "",
-      agreed: false,
-    })
+  
+    try {
+      // 기존 구글 앱 스크립트 URL 대신 프록시 API URL 사용
+      const response = await fetch("/api/proxy", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+  
+      const result = await response.json()
+  
+      if (result.result === "success") {
+        alert("참석의사를 전달 완료 했습니다.")
+        setShowModal(false)
+        setFormData({
+          attendance: "true",
+          side: "bride",
+          name: "",
+          guestCount: "1",
+          companions: "",
+          agreed: false,
+        })
+      } else {
+        // 오류 메시지 개선
+        let errorMessage = "전송에 실패했습니다. 다시 시도해주세요."
+        if (result.message) {
+          errorMessage = result.message
+        }
+        if (result.details && result.details.includes("appendRow")) {
+          errorMessage = "Google Sheets 연결에 문제가 있습니다. 잠시 후 다시 시도해주세요."
+        }
+        alert(errorMessage)
+      }
+    } catch (error) {
+      console.error("Error sending RSVP:", error)
+      alert("전송 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요.")
+    }
   }
+  
+  
 
   return (
     <section className="px-6 py-12 bg-wedding-light">
@@ -67,7 +98,7 @@ export default function RSVPSection() {
       >
         <button
           onClick={() => setShowModal(true)}
-          className="inline-flex items-center px-6 py-3 space-x-2 transition-colors bg-wedding-white border border-wedding-primary rounded-lg hover:bg-wedding-primary hover:text-wedding-white text-wedding-primary"
+          className="inline-flex items-center px-6 py-3 space-x-2 transition-colors border rounded-lg bg-wedding-white border-wedding-primary hover:bg-wedding-primary hover:text-wedding-white text-wedding-primary"
         >
           <Check className="w-4 h-4 text-current" />
           <span>참석의사 전달하기</span>
@@ -155,7 +186,7 @@ export default function RSVPSection() {
                     placeholder="(필수) 대표자 한 분의 성함을 입력해 주세요."
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-wedding-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-wedding-primary focus:border-wedding-primary text-wedding-primary placeholder:text-wedding-secondary/60 bg-wedding-white"
+                    className="w-full px-3 py-2 border rounded-lg border-wedding-primary/30 focus:outline-none focus:ring-2 focus:ring-wedding-primary focus:border-wedding-primary text-wedding-primary placeholder:text-wedding-secondary/60 bg-wedding-white"
                   />
                 </div>
 
@@ -165,7 +196,7 @@ export default function RSVPSection() {
                   <select
                     value={formData.guestCount}
                     onChange={(e) => setFormData({ ...formData, guestCount: e.target.value })}
-                    className="w-full px-3 py-2 border border-wedding-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-wedding-primary focus:border-wedding-primary text-wedding-primary bg-wedding-white"
+                    className="w-full px-3 py-2 border rounded-lg border-wedding-primary/30 focus:outline-none focus:ring-2 focus:ring-wedding-primary focus:border-wedding-primary text-wedding-primary bg-wedding-white"
                   >
                     {Array.from({ length: 11 }, (_, i) => (
                       <option key={i + 1} value={i + 1}>
@@ -184,13 +215,13 @@ export default function RSVPSection() {
                       placeholder="참석인원 성함을 쉼표(,)로 구분하여 입력해 주세요."
                       value={formData.companions}
                       onChange={(e) => setFormData({ ...formData, companions: e.target.value })}
-                      className="w-full px-3 py-2 border border-wedding-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-wedding-primary focus:border-wedding-primary text-wedding-primary placeholder:text-wedding-secondary/60 bg-wedding-white"
+                      className="w-full px-3 py-2 border rounded-lg border-wedding-primary/30 focus:outline-none focus:ring-2 focus:ring-wedding-primary focus:border-wedding-primary text-wedding-primary placeholder:text-wedding-secondary/60 bg-wedding-white"
                     />
                   </div>
                 )}
 
                 {/* Privacy Agreement */}
-                <div className="p-4 rounded-lg bg-wedding-light border border-wedding-primary/20">
+                <div className="p-4 border rounded-lg bg-wedding-light border-wedding-primary/20">
                   <div className="mb-2 text-sm font-medium text-wedding-primary">
                     개인정보 수집 및 이용 동의(필수) <span className="text-red-500">*</span>
                   </div>
@@ -212,7 +243,7 @@ export default function RSVPSection() {
 
                 <button
                   type="submit"
-                  className="w-full py-3 text-wedding-white transition-colors bg-wedding-primary rounded-lg hover:bg-wedding-secondary"
+                  className="w-full py-3 transition-colors rounded-lg text-wedding-white bg-wedding-primary hover:bg-wedding-secondary"
                 >
                   신랑 & 신부에게 <strong>전달하기</strong>
                 </button>
