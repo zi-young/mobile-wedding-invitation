@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { MapPin, Navigation, Car, Train } from "lucide-react"
+import { MapPin, Navigation, Car, Train, Bus } from "lucide-react"
 
 export default function LocationSection() {
   const openNavigation = (type: string) => {
@@ -120,7 +120,7 @@ export default function LocationSection() {
         </div>
         <div>
           <h3 className="flex items-center mb-3 text-lg font-semibold text-wedding-secondary">
-            <Train className="w-5 h-5 mr-2" />
+            <Bus className="w-5 h-5 mr-2" />
             셔틀버스
           </h3>
           <div className="pb-4 space-y-3 text-sm text-wedding-primary">

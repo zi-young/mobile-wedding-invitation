@@ -1,9 +1,17 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { GeistSans } from "geist/font/sans"
-import { GeistMono } from "geist/font/mono"
+import { Noto_Sans_KR } from 'next/font/google'
 import "./globals.css"
 import SecurityProvider from "@/components/SecurityProvider"
+
+// Noto Sans KR 폰트 설정
+const notoSansKr = Noto_Sans_KR({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  display: 'swap',
+  variable: '--font-noto-sans-kr',
+  preload: true,
+})
 
 export const metadata: Metadata = {
   title: " ♥ ",
@@ -23,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ko" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="ko" className={`${notoSansKr.variable}`}>
       <head>
         {/* 핸드폰 확대 기능 비활성화 */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />

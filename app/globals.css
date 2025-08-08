@@ -24,8 +24,11 @@
     --input: 48 102 80;
     --ring: 48 102 80;
     --radius: 0.75rem;
-    --font-sans: __variable_fb8f2c;
-    --font-mono: __variable_f910ec;
+  }
+
+  /* 기본 폰트 설정 */
+  :root {
+    font-size: 16px;
   }
 
   * {
@@ -39,8 +42,14 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+  html {
+    overscroll-behavior: none;
+    height: 100%;
+  }
+
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-noto-sans-kr);
     font-feature-settings: "rlig" 1, "calt" 1;
     /* 텍스트 선택 방지 */
     -webkit-user-select: none;
@@ -50,6 +59,34 @@
     /* iOS Safari에서 확대 방지 */
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
+    /* 오버스크롤 효과 제거 */
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+    background-color: rgb(var(--background));
+    /* 기본 텍스트 크기 및 줄간격 조정 */
+    font-size: 1rem;
+    line-height: 1.6;
+    letter-spacing: -0.02em;
+    word-break: keep-all;
+  }
+
+  /* 제목 텍스트 스타일 */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
+  h4 { font-size: 1.25rem; }
+
+  /* 본문 텍스트 스타일 */
+  p {
+    margin-bottom: 1rem;
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   /* 입력 필드는 텍스트 선택 허용 */
@@ -61,15 +98,12 @@
   }
 
   .font-display {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-      "Droid Sans", "Helvetica Neue", sans-serif;
-    font-weight: 300;
-    font-style: italic;
+    font-family: var(--font-noto-sans-kr);
+    font-weight: 700;
   }
 
   .font-sans {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-      "Droid Sans", "Helvetica Neue", sans-serif;
+    font-family: var(--font-noto-sans-kr);
   }
 }
 
