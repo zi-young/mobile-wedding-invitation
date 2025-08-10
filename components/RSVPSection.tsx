@@ -13,7 +13,7 @@ export default function RSVPSection() {
     side: "bride",
     name: "",
     guestCount: "1",
-    companions: "",
+    companionName: "",
     agreed: false,
   })
 
@@ -49,7 +49,7 @@ export default function RSVPSection() {
           side: "bride",
           name: "",
           guestCount: "1",
-          companions: "",
+          companionName: "",
           agreed: false,
         })
       } else {
@@ -213,8 +213,8 @@ export default function RSVPSection() {
                     <input
                       type="text"
                       placeholder="참석인원 성함을 쉼표(,)로 구분하여 입력해 주세요."
-                      value={formData.companions}
-                      onChange={(e) => setFormData({ ...formData, companions: e.target.value })}
+                      value={formData.companionName}
+                      onChange={(e) => setFormData({ ...formData, companionName: e.target.value })}
                       className="w-full px-3 py-2 border rounded-lg border-wedding-primary/30 focus:outline-none focus:ring-2 focus:ring-wedding-primary focus:border-wedding-primary text-wedding-primary placeholder:text-wedding-secondary/60 bg-wedding-white"
                     />
                   </div>

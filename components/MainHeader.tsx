@@ -18,7 +18,7 @@ export default function MainHeader() {
       <div
         className="absolute inset-0 bg-center bg-no-repeat bg-cover"
         style={{
-          backgroundImage: "url(/placeholder.svg?height=800&width=425&query=romantic+wedding+couple+portrait)",
+          backgroundImage: "url(/SML05500.jpg)",
           transform: `translateY(${scrollY * 0.3}px)`,
         }}
       />
@@ -26,46 +26,6 @@ export default function MainHeader() {
       {/* Overlay with new color theme */}
       <div className="absolute inset-0 bg-gradient-to-b from-wedding-secondary/40 to-wedding-primary/60" />
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col justify-end h-full p-6 pb-8 text-white">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="mb-4"
-        >
-          <div className="mb-2 text-center">
-            <svg className="w-full h-32 fill-current" viewBox="0 0 343 178">
-              <text
-                x="50%"
-                y="50%"
-                textAnchor="middle"
-                dominantBaseline="middle"
-                className="font-serif text-4xl italic text-wedding-white drop-shadow-lg"
-              >
-                Love
-              </text>
-            </svg>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 1 }}
-          className="grid grid-cols-3 gap-4 text-xs tracking-[4px] uppercase font-light text-wedding-white"
-        >
-          <div className="flex justify-between">
-            <span>IN</span>
-            <span>46</span>
-          </div>
-          <div></div>
-          <div className="flex justify-between">
-            <span>DAYS'</span>
-            <span>TIME</span>
-          </div>
-        </motion.div>
-      </div>
     </div>
   )
 }

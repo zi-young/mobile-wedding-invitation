@@ -5,18 +5,26 @@ import { motion } from "framer-motion"
 import { ChevronDown, X, ArrowLeft, ArrowRight, ChevronUp } from "lucide-react"
 
 const galleryImages = [
-  "/placeholder.svg?height=400&width=400",
-  "/placeholder.svg?height=400&width=400",
-  "/placeholder.svg?height=400&width=400",
-  "/placeholder.svg?height=400&width=400",
-  "/placeholder.svg?height=400&width=400",
-  "/placeholder.svg?height=400&width=400",
-  "/placeholder.svg?height=400&width=400",
-  "/placeholder.svg?height=400&width=400",
-  "/placeholder.svg?height=400&width=400",
-  "/placeholder.svg?height=400&width=400",
-  "/placeholder.svg?height=400&width=400",
-  "/placeholder.svg?height=400&width=400",
+  "/KakaoTalk_20250615_173319252_수정.jpg",
+
+  "/SML07021.jpg",
+  "/SML05620.jpg",
+  "/SML05276.jpg",
+  "/SML04459_수정.jpg",
+  "/SML04275_수정.jpg",
+  "/SML04195.jpg",
+  "/SML04145.jpg",
+  "/SML03869.jpg",
+  "/SML07080.jpg",
+  "/KakaoTalk_20250809_154851039_01.jpg",
+  "/FAM09474.jpg",
+  "/FAM09364.jpg",
+  "/SML07620.jpg",
+  "/SML07608.jpg",
+  "/SML07464.jpg",
+  "/SML07318.jpg",
+  "/SML07863.jpg",
+  // "/SML07824_수정.jpg",
 ]
 
 export default function GallerySection() {
@@ -106,8 +114,8 @@ export default function GallerySection() {
         viewport={{ once: true }}
         className="mb-8 text-center"
       >
-        <div className="text-sm tracking-[3px] text-wedding-secondary mb-2">GALLERY</div>
-        <h2 className="text-xl font-medium text-wedding-primary">웨딩 갤러리</h2>
+        {/* <div className="text-sm tracking-[3px] text-wedding-secondary mb-2">GALLERY</div> */}
+        <h2 className="text-xl font-medium text-wedding-primary">사진</h2>
       </motion.div>
 
       <motion.div

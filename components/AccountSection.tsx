@@ -12,8 +12,8 @@ const accounts = {
   ],
   bride: [
     { name: "박형철", bank: "국민", number: "123" },
-    { name: "다이쿠지에코", bank: "농협", number: "123" },
-    { name: "박희영", bank: "카카오뱅크", number: "123" },
+    { name: "다이쿠지에코", bank: "농협", number: "170781-56-082109" },
+    // { name: "박희영", bank: "카카오뱅크", number: "123" },
   ],
 }
 
@@ -53,7 +53,7 @@ export default function AccountSection() {
         className="space-y-4"
       >
         {/* Groom Side */}
-        <div className="overflow-hidden border border-wedding-primary/20 rounded-lg">
+        {/* <div className="overflow-hidden border border-wedding-primary/20 rounded-lg">
           <button
             onClick={() => toggleSection("groom")}
             className="flex items-center justify-between w-full px-4 py-3 transition-colors"
@@ -87,7 +87,7 @@ export default function AccountSection() {
               ))}
             </div>
           )}
-        </div>
+        </div> */}
 
         {/* Bride Side */}
         <div className="overflow-hidden border border-wedding-primary/20 rounded-lg">

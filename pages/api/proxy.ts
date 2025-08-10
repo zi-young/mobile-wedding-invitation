@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const url = "https://script.google.com/macros/s/AKfycbzeSdehAO0ePY2MfPP-W1stqrVllMsR36yaJ5oxxWGLUi-GezAZHjDqw8eKi_yJb8K0Tw/exec";
+  const url = "https://script.google.com/macros/s/AKfycbzcLtJMkA0o20-4SrM-8Pyz7aGv85fxBAcatNe7S4oiYr8V-B-RnIoz3ehY13kFp4Ez0Q/exec";
 
   try {
     console.log("받은 데이터:", req.body); 

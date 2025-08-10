@@ -1,11 +1,102 @@
 "use client"
 
+import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { MapPin, Navigation, Car, Train, Bus } from "lucide-react"
 
 export default function LocationSection() {
+  const mapContainerRef = useRef<HTMLDivElement | null>(null)
+  const [mapLoadError, setMapLoadError] = useState<string | null>(null)
+
+  const NAVER_MAP_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID
+  const address = "경기도 용인시 수지구 동천로 425-2"
+
+  // Load Naver Maps script lazily on client
+  useEffect(() => {
+    let isCancelled = false
+
+    async function loadAndRenderMap() {
+      if (!mapContainerRef.current) return
+
+      if (!NAVER_MAP_CLIENT_ID) {
+        setMapLoadError("네이버 지도 클라이언트 ID가 설정되지 않았습니다.")
+        return
+      }
+
+      try {
+        await loadNaverMapsScript(NAVER_MAP_CLIENT_ID)
+
+        if (isCancelled || !mapContainerRef.current) return
+
+        const naver = (window as any).naver
+        if (!naver?.maps) {
+          setMapLoadError("네이버 지도 스크립트를 불러오지 못했습니다.")
+          return
+        }
+
+        const defaultCenter = new naver.maps.LatLng(37.5665, 126.978) // Fallback: Seoul City Hall
+        const map = new naver.maps.Map(mapContainerRef.current, {
+          center: defaultCenter,
+          zoom: 15,
+        })
+
+        // Try geocoding the address to center the map precisely
+        if (naver.maps.Service?.geocode) {
+          naver.maps.Service.geocode({ query: address }, (status: any, response: any) => {
+            if (status === naver.maps.Service.Status.OK) {
+              const result = response.v2.addresses?.[0]
+              if (result) {
+                const lat = parseFloat(result.y)
+                const lng = parseFloat(result.x)
+                const position = new naver.maps.LatLng(lat, lng)
+                map.setCenter(position)
+                new naver.maps.Marker({ position, map })
+                return
+              }
+            }
+            // Fallback marker at default center if geocoding fails
+            new naver.maps.Marker({ position: defaultCenter, map })
+          })
+        } else {
+          // Geocoder unavailable, place marker at default center
+          new naver.maps.Marker({ position: defaultCenter, map })
+        }
+      } catch (err) {
+        setMapLoadError("네이버 지도 로딩 중 오류가 발생했습니다.")
+      }
+    }
+
+    loadAndRenderMap()
+    return () => {
+      isCancelled = true
+    }
+  }, [NAVER_MAP_CLIENT_ID])
+
+  function loadNaverMapsScript(clientId: string): Promise<void> {
+    const existing = document.querySelector<HTMLScriptElement>(
+      'script[src^="https://openapi.map.naver.com/openapi/v3/maps.js"]'
+    )
+    return new Promise((resolve, reject) => {
+      if ((window as any).naver?.maps) {
+        resolve()
+        return
+      }
+      if (existing) {
+        existing.addEventListener("load", () => resolve())
+        existing.addEventListener("error", () => reject(new Error("script error")))
+        return
+      }
+      const script = document.createElement("script")
+      script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}&submodules=geocoder`
+      script.async = true
+      script.defer = true
+      script.onload = () => resolve()
+      script.onerror = () => reject(new Error("script error"))
+      document.head.appendChild(script)
+    })
+  }
+
   const openNavigation = (type: string) => {
-    const address = "경기도 용인시 수지구 동천로 425-2" 
     const encodedAddress = encodeURIComponent(address)
 
     switch (type) {
@@ -51,9 +142,12 @@ export default function LocationSection() {
         viewport={{ once: true }}
         className="mb-6"
       >
-        <div className="flex items-center justify-center h-48 mb-4 bg-wedding-primary/10 rounded-lg border border-wedding-primary/20">
-          <MapPin className="w-8 h-8 text-wedding-primary" />
+        <div className="mb-4 rounded-lg border border-wedding-primary/20 overflow-hidden">
+          <div ref={mapContainerRef} className="h-64 w-full bg-wedding-primary/5" />
         </div>
+        {mapLoadError && (
+          <div className="text-center text-sm text-red-600">{mapLoadError}</div>
+        )}
       </motion.div>
 
       <motion.div
@@ -100,7 +194,7 @@ export default function LocationSection() {
           </h3>
           <div className="space-y-1 text-sm text-wedding-primary">
             <p>
-              <strong>용인 더 포레스트 웨딩</strong> (경기도 용인시 수지구 동천로 425-2)
+            네비게이션에서 <strong>'더포레스트웨딩'</strong><span> 또는</span> <strong>'가든아트아뜰리에'</strong> <span>검색</span>
             </p>
           </div>
         </div>
@@ -127,7 +221,7 @@ export default function LocationSection() {
             <div>
               <p className="font-medium">신분당선 동천역 1번출구 앞 셔틀버스 탑승</p>
               <p>(더포레스트웨딩 붙어있음)</p>
-              <p>1차 출발 : 1400 / 2차 출발 :</p>
+              <p>(1차 출발 : 13:30 / 2차 출발 : 14:00)</p>
             </div>
           </div>
         </div>
