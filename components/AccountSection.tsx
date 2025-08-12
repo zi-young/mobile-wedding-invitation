@@ -11,9 +11,9 @@ const accounts = {
     { name: "우만경", bank: "국민", number: "123" },
   ],
   bride: [
-    { name: "박형철", bank: "국민", number: "123" },
+    { name: "박형철", bank: "농협", number: "207179-52-261426" },
     { name: "다이쿠지에코", bank: "농협", number: "170781-56-082109" },
-    // { name: "박희영", bank: "카카오뱅크", number: "123" },
+    { name: "박희영", bank: "신한", number: "110-385-384960" },
   ],
 }
 
@@ -41,7 +41,7 @@ export default function AccountSection() {
         viewport={{ once: true }}
         className="mb-8 text-center"
       >
-        <div className="text-sm tracking-[3px] text-wedding-secondary mb-2">ACCOUNT</div>
+        {/* <div className="text-sm tracking-[3px] text-wedding-secondary mb-2">ACCOUNT</div> */}
         <h2 className="text-xl font-medium text-wedding-primary">마음 전하실 곳</h2>
       </motion.div>
 
@@ -53,7 +53,7 @@ export default function AccountSection() {
         className="space-y-4"
       >
         {/* Groom Side */}
-        {/* <div className="overflow-hidden border border-wedding-primary/20 rounded-lg">
+        {/* <div className="overflow-hidden border rounded-lg border-wedding-primary/20">
           <button
             onClick={() => toggleSection("groom")}
             className="flex items-center justify-between w-full px-4 py-3 transition-colors"
@@ -90,7 +90,7 @@ export default function AccountSection() {
         </div> */}
 
         {/* Bride Side */}
-        <div className="overflow-hidden border border-wedding-primary/20 rounded-lg">
+        <div className="overflow-hidden border rounded-lg border-wedding-primary/20">
           <button
             onClick={() => toggleSection("bride")}
             className="flex items-center justify-between w-full px-4 py-3 transition-colors"

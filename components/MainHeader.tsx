@@ -23,9 +23,6 @@ export default function MainHeader() {
         }}
       />
 
-      {/* Overlay with new color theme */}
-      <div className="absolute inset-0 bg-gradient-to-b from-wedding-secondary/40 to-wedding-primary/60" />
-
     </div>
   )
 }

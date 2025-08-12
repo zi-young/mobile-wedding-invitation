@@ -11,7 +11,10 @@ export default function LocationSection() {
   const NAVER_MAP_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID
   const address = "경기도 용인시 수지구 동천로 425-2"
 
-  // Load Naver Maps script lazily on client
+  // 고정 좌표 (직접 확인한 정확한 위도/경도)
+  const fixedLat = 37.342488  // 정확한 값으로 수정하세요
+  const fixedLng = 127.060080  // 정확한 값으로 수정하세요
+
   useEffect(() => {
     let isCancelled = false
 
@@ -34,33 +37,23 @@ export default function LocationSection() {
           return
         }
 
-        const defaultCenter = new naver.maps.LatLng(37.5665, 126.978) // Fallback: Seoul City Hall
+        const position = new naver.maps.LatLng(fixedLat, fixedLng)
+
         const map = new naver.maps.Map(mapContainerRef.current, {
-          center: defaultCenter,
-          zoom: 15,
+          center: position,
+          zoom: 16,
         })
 
-        // Try geocoding the address to center the map precisely
-        if (naver.maps.Service?.geocode) {
-          naver.maps.Service.geocode({ query: address }, (status: any, response: any) => {
-            if (status === naver.maps.Service.Status.OK) {
-              const result = response.v2.addresses?.[0]
-              if (result) {
-                const lat = parseFloat(result.y)
-                const lng = parseFloat(result.x)
-                const position = new naver.maps.LatLng(lat, lng)
-                map.setCenter(position)
-                new naver.maps.Marker({ position, map })
-                return
-              }
-            }
-            // Fallback marker at default center if geocoding fails
-            new naver.maps.Marker({ position: defaultCenter, map })
-          })
-        } else {
-          // Geocoder unavailable, place marker at default center
-          new naver.maps.Marker({ position: defaultCenter, map })
-        }
+        new naver.maps.Marker({
+          position,
+          map,
+          icon: {
+            url: '/229169@2x.png',
+            size: new naver.maps.Size(32, 38),
+            anchor: new naver.maps.Point(16, 38),
+            scaledSize: new naver.maps.Size(32, 38)
+          }
+        })
       } catch (err) {
         setMapLoadError("네이버 지도 로딩 중 오류가 발생했습니다.")
       }
@@ -87,7 +80,7 @@ export default function LocationSection() {
         return
       }
       const script = document.createElement("script")
-      script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}&submodules=geocoder`
+      script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${clientId}&submodules=geocoder`
       script.async = true
       script.defer = true
       script.onload = () => resolve()
@@ -132,7 +125,7 @@ export default function LocationSection() {
         className="mb-6 text-center"
       >
         <div className="mb-2 text-lg font-semibold text-wedding-secondary">용인 더 포레스트 웨딩</div>
-        <div className="text-wedding-primary">경기도 용인시 수지구 동천로 425-2</div>
+        <div className="text-wedding-primary">{address}</div>
       </motion.div>
 
       <motion.div
@@ -142,11 +135,11 @@ export default function LocationSection() {
         viewport={{ once: true }}
         className="mb-6"
       >
-        <div className="mb-4 rounded-lg border border-wedding-primary/20 overflow-hidden">
-          <div ref={mapContainerRef} className="h-64 w-full bg-wedding-primary/5" />
+        <div className="mb-4 overflow-hidden border rounded-lg border-wedding-primary/20">
+          <div ref={mapContainerRef} className="w-full h-72 bg-wedding-primary/5" />
         </div>
         {mapLoadError && (
-          <div className="text-center text-sm text-red-600">{mapLoadError}</div>
+          <div className="text-sm text-center text-red-600">{mapLoadError}</div>
         )}
       </motion.div>
 
@@ -167,19 +160,19 @@ export default function LocationSection() {
           <div className="flex space-x-2">
             <button
               onClick={() => openNavigation("naver")}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white transition-colors bg-wedding-primary rounded-lg hover:bg-wedding-secondary"
+              className="flex-1 px-4 py-2 text-sm font-medium text-white transition-colors bg-red-600 rounded-lg hover:bg-red-700"
             >
               네이버지도
             </button>
             <button
               onClick={() => openNavigation("kakao")}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white transition-colors bg-wedding-secondary rounded-lg hover:bg-wedding-dark"
+              className="flex-1 px-4 py-2 text-sm font-medium text-white transition-colors bg-yellow-500 rounded-lg hover:bg-yellow-600"
             >
               카카오맵
             </button>
             <button
               onClick={() => openNavigation("google")}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white transition-colors bg-wedding-primary rounded-lg hover:bg-wedding-secondary"
+              className="flex-1 px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700"
             >
               구글맵
             </button>
@@ -194,7 +187,7 @@ export default function LocationSection() {
           </h3>
           <div className="space-y-1 text-sm text-wedding-primary">
             <p>
-            네비게이션에서 <strong>'더포레스트웨딩'</strong><span> 또는</span> <strong>'가든아트아뜰리에'</strong> <span>검색</span>
+              네비게이션에서 <strong>'더포레스트웨딩'</strong> 또는 <strong>'가든아트아뜰리에'</strong> 검색
             </p>
           </div>
         </div>
