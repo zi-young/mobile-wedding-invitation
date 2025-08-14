@@ -2,7 +2,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useParams } from "next/navigation" // URL 파라미터를 가져오기 위한 훅
+import { useParams } from "next/navigation" 
 
 // 필요한 컴포넌트들을 임포트합니다.
 import MainHeader from "@/components/MainHeader"
@@ -10,30 +10,38 @@ import InvitationSection from "@/components/InvitationSection"
 import CalendarSection from "@/components/CalendarSection"
 import GallerySection from "@/components/GallerySection"
 import LocationSection from "@/components/LocationSection"
-import AccountSection from "@/components/AccountSection" // 조건부 렌더링될 컴포넌트
+import AccountSection from "@/components/AccountSection" 
 import RSVPSection from "@/components/RSVPSection"
 import ShareSection from "@/components/ShareSection"
 import Footer from "@/components/Footer"
 
+// generateStaticParams 함수를 추가합니다.
+// 이 함수는 'output: "export"' 설정 시 필수적입니다.
+// Next.js에게 빌드 시 어떤 동적 경로를 미리 생성할지 알려줍니다.
+export async function generateStaticParams() {
+  // 예를 들어, '1'과 '2' 두 가지 pageId 값에 대해 페이지를 미리 생성하도록 설정합니다.
+  // '1' 페이지는 AccountSection이 보이고, '2' 페이지는 AccountSection이 보이지 않습니다.
+  const paths = [
+    { pageId: '1' },
+    { pageId: '2' }, // AccountSection이 없는 버전
+    // 필요한 경우 다른 pageId 값도 추가할 수 있습니다.
+    // { pageId: 'another-path' },
+  ];
+
+  return paths;
+}
+
 export default function WeddingInvitation() {
   const [isLoaded, setIsLoaded] = useState(false)
-  const params = useParams() // URL 파라미터 객체를 가져옵니다. (예: { pageId: '1' } 또는 { pageId: ['1', '2'] })
+  const params = useParams() 
 
-  // `params`에서 `pageId`를 안전하게 가져옵니다.
-  // `routePageId`는 `string | string[] | undefined` 타입일 수 있습니다.
   const routePageId = params?.pageId;
-
-  // 실제 조건 비교에 사용할 `pageId` 값을 추출합니다.
-  // `routePageId`가 배열이면 첫 번째 요소를 사용하고, 그렇지 않으면 `routePageId` 자체를 사용합니다.
-  // 만약 `routePageId`가 `undefined`이면 `undefined`를 유지하여 안전성을 높입니다.
   const currentPageIdentifier = Array.isArray(routePageId) ? routePageId[0] : routePageId;
 
   useEffect(() => {
-    // 컴포넌트가 마운트되면 로딩 상태를 true로 설정하여 스피너를 숨깁니다.
     setIsLoaded(true)
   }, [])
 
-  // 컴포넌트 로딩이 완료되지 않았을 때 표시할 로딩 스피너입니다.
   if (!isLoaded) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
