@@ -1,19 +1,6 @@
 // app/[pageId]/page.tsx
-"use client"
-
-import { useState, useEffect } from "react"
-import { useParams } from "next/navigation" 
-
-// 필요한 컴포넌트들을 임포트합니다.
-import MainHeader from "@/components/MainHeader"
-import InvitationSection from "@/components/InvitationSection"
-import CalendarSection from "@/components/CalendarSection"
-import GallerySection from "@/components/GallerySection"
-import LocationSection from "@/components/LocationSection"
-import AccountSection from "@/components/AccountSection" 
-import RSVPSection from "@/components/RSVPSection"
-import ShareSection from "@/components/ShareSection"
-import Footer from "@/components/Footer"
+// 이 파일은 이제 서버 컴포넌트입니다. (상단에 "use client"가 없습니다.)
+// 클라이언트 훅(useState, useEffect, useParams 등)은 사용할 수 없습니다.
 
 // generateStaticParams 함수를 추가합니다.
 // 이 함수는 'output: "export"' 설정 시 필수적입니다.
@@ -31,45 +18,25 @@ export async function generateStaticParams() {
   return paths;
 }
 
-export default function WeddingInvitation() {
-  const [isLoaded, setIsLoaded] = useState(false)
-  const params = useParams() 
+// 이 파일은 클라이언트 훅을 직접 사용하지 않으므로,
+// 실제 UI 로직을 담고 있는 클라이언트 컴포넌트 `WeddingInvitationContent`를 임포트합니다.
+// 이 `WeddingInvitationContent.tsx` 파일은 `app/[pageId]` 폴더 안에 있다고 가정합니다.
+import WeddingInvitationContent from './WeddingInvitationContent';
 
+// 이 WeddingInvitation 컴포넌트 자체는 서버에서 렌더링됩니다.
+// 동적 라우팅의 파라미터(`pageId`)는 `params` prop으로 전달받습니다.
+export default function WeddingInvitation({ params }: { params: { pageId: string | string[] } }) {
+  // `params`에서 `pageId`를 안전하게 가져옵니다.
+  // `pageId`는 단일 문자열이거나 (예: /1) 문자열 배열일 수 있습니다 (예: /[...slug] 같은 복수 경로).
   const routePageId = params?.pageId;
+
+  // 실제 조건 비교에 사용할 `pageId` 값을 추출합니다.
+  // `routePageId`가 배열이면 첫 번째 요소를 사용하고, 그렇지 않으면 `routePageId` 자체를 사용합니다.
   const currentPageIdentifier = Array.isArray(routePageId) ? routePageId[0] : routePageId;
 
-  useEffect(() => {
-    setIsLoaded(true)
-  }, [])
-
-  if (!isLoaded) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="w-8 h-8 border-2 rounded-full animate-spin border-primary border-t-transparent"></div>
-      </div>
-    )
-  }
-
-  // URL의 pageId가 '1'일 경우에만 AccountSection을 렌더링합니다.
-  // 예를 들어, `localhost:3000/1`로 접속하면 AccountSection이 보이고,
-  // `localhost:3000/2` 또는 다른 경로로 접속하면 AccountSection이 보이지 않습니다.
-  const shouldRenderAccountSection = currentPageIdentifier === "1"
-
+  // 실제 UI 렌더링과 클라이언트 사이드 로직은 `WeddingInvitationContent` 컴포넌트에 위임합니다.
+  // `currentPageIdentifier` 값을 props로 전달하여 자식 컴포넌트에서 활용할 수 있도록 합니다.
   return (
-    <div className="min-h-screen font-sans bg-background">
-      {/* 최대 너비 425px로 설정하여 모바일 화면에 최적화된 레이아웃을 만듭니다. */}
-      <div className="max-w-[425px] mx-auto relative overflow-hidden bg-background">
-        <MainHeader />
-        <InvitationSection />
-        <GallerySection />
-        <CalendarSection />
-        <LocationSection />
-        {/* AccountSection을 조건부로 렌더링합니다. */}
-        {shouldRenderAccountSection && <AccountSection />}
-        <RSVPSection />
-        <ShareSection />
-        <Footer />
-      </div>
-    </div>
-  )
+    <WeddingInvitationContent currentPageIdentifier={currentPageIdentifier} />
+  );
 }

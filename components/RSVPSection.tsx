@@ -7,7 +7,9 @@ import { motion } from "framer-motion"
 import { X, Check } from "lucide-react"
 
 export default function RSVPSection() {
-  const [showModal, setShowModal] = useState(true)
+  const [showModal, setShowModal] = useState(false) // 초기에는 모달을 숨김
+  const [modalMessage, setModalMessage] = useState("") // 모달 메시지 상태
+  const [isSuccessModal, setIsSuccessModal] = useState(false) // 성공/실패 모달 타입
   const [formData, setFormData] = useState({
     attendance: "true",
     side: "bride",
@@ -17,33 +19,53 @@ export default function RSVPSection() {
     agreed: false,
   })
 
+  // 커스텀 알림 모달을 보여주는 함수
+  const showAlertModal = (message: string, isSuccess: boolean) => {
+    setModalMessage(message)
+    setIsSuccessModal(isSuccess)
+    setShowModal(true)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
   
     if (!formData.name.trim()) {
-      alert("참석자 성함을 입력해주세요.")
+      showAlertModal("참석자 성함을 입력해주세요.", false) // alert 대신 커스텀 모달
       return
     }
     if (!formData.agreed) {
-      alert("개인정보 수집 및 이용에 동의해주세요.")
+      showAlertModal("개인정보 수집 및 이용에 동의해주세요.", false) // alert 대신 커스텀 모달
       return
     }
   
+    // 구글 앱 스크립트의 '배포된 웹 앱' URL을 여기에 직접 입력합니다.
+    // 이는 API Route를 거치지 않고 직접 통신하기 위함입니다.
+    const googleAppsScriptUrl = "https://script.google.com/macros/s/AKfycbzcLtJMkA0o20-4SrM-8Pyz7aGv85fxBAcatNe7S4oiYr8V-B-RnIoz3ehY13kFp4Ez0Q/exec";
+
     try {
-      // 기존 구글 앱 스크립트 URL 대신 프록시 API URL 사용
-      const response = await fetch("/api/proxy", {
+      console.log("전송할 데이터:", formData); 
+      const response = await fetch(googleAppsScriptUrl, { // API Route 대신 직접 Google Apps Script URL 사용
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          // CORS 문제 해결을 위해 'Origin' 헤더를 명시적으로 보내는 경우가 도움이 될 수 있습니다.
+          // 'Access-Control-Allow-Origin'은 서버 응답 헤더이므로 클라이언트 요청에는 필요 없습니다.
         },
         body: JSON.stringify(formData),
-      })
+        // mode: 'no-cors'를 사용할 경우, 스크립트 응답을 받을 수 없을 수 있습니다.
+        // 스크립트 배포 시 '모든 사용자에게 액세스 권한 부여'를 확인하세요.
+      });
   
-      const result = await response.json()
-  
-      if (result.result === "success") {
-        alert("참석의사를 전달 완료 했습니다.")
-        setShowModal(false)
+      // Google Apps Script는 보통 텍스트 응답을 반환합니다.
+      const textResult = await response.text();
+      console.log("Google Apps Script 응답 (텍스트):", textResult);
+      
+      // Google Apps Script에서 성공/실패 여부를 판단하는 로직이 필요할 수 있습니다.
+      // 여기서는 스크립트가 'success'라는 문자열을 반환한다고 가정합니다.
+      if (textResult.includes("success")) { // 스크립트 응답 텍스트에 'success'가 포함되어 있는지 확인
+        showAlertModal("참석의사를 전달 완료 했습니다.", true) // alert 대신 커스텀 모달
+        // 폼 초기화 및 모달 닫기
+        setShowModal(false) // onSubmit 성공 시 모달 닫기
         setFormData({
           attendance: "true",
           side: "bride",
@@ -53,23 +75,30 @@ export default function RSVPSection() {
           agreed: false,
         })
       } else {
-        // 오류 메시지 개선
-        let errorMessage = "전송에 실패했습니다. 다시 시도해주세요."
-        if (result.message) {
-          errorMessage = result.message
-        }
-        if (result.details && result.details.includes("appendRow")) {
-          errorMessage = "Google Sheets 연결에 문제가 있습니다. 잠시 후 다시 시도해주세요."
-        }
-        alert(errorMessage)
+        // 스크립트에서 명확한 오류 메시지를 반환하지 않는 경우를 대비
+        showAlertModal("전송에 실패했습니다. Google Apps Script 응답을 확인해주세요.", false)
+        console.error("Google Apps Script 응답 오류:", textResult);
       }
     } catch (error) {
       console.error("Error sending RSVP:", error)
-      alert("전송 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요.")
+      showAlertModal("전송 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요.", false)
     }
   }
   
-  
+  // handleInputChange 함수를 수정하여 'checked' 속성 접근 방식을 개선했습니다.
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    // 이벤트 타겟이 HTMLInputElement이고 타입이 'checkbox' 또는 'radio'일 경우에만 checked 값을 사용합니다.
+    const inputElement = e.target as HTMLInputElement; // HTMLInputElement로 단언하여 'type' 속성 접근
+    const newValue = (inputElement.type === "checkbox" || inputElement.type === "radio") 
+                     ? inputElement.checked 
+                     : value;
+    
+    setFormData((prev) => ({
+      ...prev,
+      [name]: newValue,
+    }));
+  };
 
   return (
     <section className="px-6 py-12 bg-wedding-light">
@@ -105,7 +134,7 @@ export default function RSVPSection() {
         </button>
       </motion.div>
 
-      {/* Modal */}
+      {/* RSVP Form Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
           <div className="bg-wedding-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
@@ -128,7 +157,7 @@ export default function RSVPSection() {
                         name="attendance"
                         value="true"
                         checked={formData.attendance === "true"}
-                        onChange={(e) => setFormData({ ...formData, attendance: e.target.value })}
+                        onChange={handleInputChange}
                         className="mr-2 text-wedding-primary focus:ring-wedding-primary"
                       />
                       <span className="text-wedding-primary">가능</span>
@@ -139,7 +168,7 @@ export default function RSVPSection() {
                         name="attendance"
                         value="false"
                         checked={formData.attendance === "false"}
-                        onChange={(e) => setFormData({ ...formData, attendance: e.target.value })}
+                        onChange={handleInputChange}
                         className="mr-2 text-wedding-primary focus:ring-wedding-primary"
                       />
                       <span className="text-wedding-primary">불가</span>
@@ -157,7 +186,7 @@ export default function RSVPSection() {
                         name="side"
                         value="groom"
                         checked={formData.side === "groom"}
-                        onChange={(e) => setFormData({ ...formData, side: e.target.value })}
+                        onChange={handleInputChange}
                         className="mr-2 text-wedding-primary focus:ring-wedding-primary"
                       />
                       <span className="text-wedding-primary">🤵 신랑측</span>
@@ -168,7 +197,7 @@ export default function RSVPSection() {
                         name="side"
                         value="bride"
                         checked={formData.side === "bride"}
-                        onChange={(e) => setFormData({ ...formData, side: e.target.value })}
+                        onChange={handleInputChange}
                         className="mr-2 text-wedding-primary focus:ring-wedding-primary"
                       />
                       <span className="text-wedding-primary">👰 신부측</span>
@@ -183,9 +212,10 @@ export default function RSVPSection() {
                   </label>
                   <input
                     type="text"
+                    name="name" // name 속성 추가
                     placeholder="(필수) 대표자 한 분의 성함을 입력해 주세요."
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={handleInputChange}
                     className="w-full px-3 py-2 border rounded-lg border-wedding-primary/30 focus:outline-none focus:ring-2 focus:ring-wedding-primary focus:border-wedding-primary text-wedding-primary placeholder:text-wedding-secondary/60 bg-wedding-white"
                   />
                 </div>
@@ -194,8 +224,9 @@ export default function RSVPSection() {
                 <div>
                   <label className="block mb-2 text-sm font-medium text-wedding-primary">추가인원</label>
                   <select
+                    name="guestCount" // name 속성 추가
                     value={formData.guestCount}
-                    onChange={(e) => setFormData({ ...formData, guestCount: e.target.value })}
+                    onChange={handleInputChange}
                     className="w-full px-3 py-2 border rounded-lg border-wedding-primary/30 focus:outline-none focus:ring-2 focus:ring-wedding-primary focus:border-wedding-primary text-wedding-primary bg-wedding-white"
                   >
                     {Array.from({ length: 11 }, (_, i) => (
@@ -212,9 +243,10 @@ export default function RSVPSection() {
                     <label className="block mb-2 text-sm font-medium text-wedding-primary">동행인 성함</label>
                     <input
                       type="text"
+                      name="companionName" // name 속성 추가
                       placeholder="참석인원 성함을 쉼표(,)로 구분하여 입력해 주세요."
                       value={formData.companionName}
-                      onChange={(e) => setFormData({ ...formData, companionName: e.target.value })}
+                      onChange={handleInputChange}
                       className="w-full px-3 py-2 border rounded-lg border-wedding-primary/30 focus:outline-none focus:ring-2 focus:ring-wedding-primary focus:border-wedding-primary text-wedding-primary placeholder:text-wedding-secondary/60 bg-wedding-white"
                     />
                   </div>
@@ -233,8 +265,9 @@ export default function RSVPSection() {
                   <label className="flex items-center">
                     <input
                       type="checkbox"
+                      name="agreed" // name 속성 추가
                       checked={formData.agreed}
-                      onChange={(e) => setFormData({ ...formData, agreed: e.target.checked })}
+                      onChange={handleInputChange}
                       className="mr-2 text-wedding-primary focus:ring-wedding-primary"
                     />
                     <span className="text-sm text-wedding-primary">동의합니다.</span>
@@ -249,6 +282,24 @@ export default function RSVPSection() {
                 </button>
               </form>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Custom Alert Modal */}
+      {modalMessage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+          <div className="w-full max-w-sm p-6 text-center rounded-lg shadow-lg bg-wedding-white">
+            <h4 className={`text-lg font-bold mb-4 ${isSuccessModal ? 'text-green-600' : 'text-red-600'}`}>
+              {isSuccessModal ? "알림" : "오류"}
+            </h4>
+            <p className="mb-6 text-wedding-primary">{modalMessage}</p>
+            <button
+              onClick={() => setModalMessage("")} // 메시지 상태를 비워 모달 닫기
+              className="px-6 py-2 rounded-lg bg-wedding-primary text-wedding-white hover:bg-wedding-secondary"
+            >
+              확인
+            </button>
           </div>
         </div>
       )}
