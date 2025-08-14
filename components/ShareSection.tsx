@@ -13,13 +13,13 @@ export default function ShareSection() {
       script.async = true
       script.onload = () => {
         if (!window.Kakao.isInitialized()) {
-          window.Kakao.init("YOUR_APP_KEY") // 🔹 카카오 JavaScript 키 입력
+          window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY)
         }
       }
       document.body.appendChild(script)
     } else {
       if (!window.Kakao.isInitialized()) {
-        window.Kakao.init("YOUR_APP_KEY") // 🔹 카카오 JavaScript 키 입력
+        window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY)
       }
     }
   }, [])
@@ -30,23 +30,26 @@ export default function ShareSection() {
       return
     }
 
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+    const imageUrl = `${siteUrl}/kakao_img.jpg` // public 폴더 안 이미지
+
     window.Kakao.Share.sendDefault({
       objectType: "feed",
       content: {
-        title: "XX 결혼식에 초대합니다 💌",
-        description: "2025년 10월 12일, ○○웨딩홀",
-        imageUrl: "https://kakao_img.jpg", // 🔹 초대장 사진 URL
+        title: "우만경 🩷 박희영 결혼합니다.",
+        description: "2025년 11월 08일, 더포레스트웨딩",
+        imageUrl,
         link: {
-          mobileWebUrl: "https://your-invitation-site.com",
-          webUrl: "https://your-invitation-site.com",
+          mobileWebUrl: siteUrl,
+          webUrl: siteUrl,
         },
       },
       buttons: [
         {
           title: "초대장 보기",
           link: {
-            mobileWebUrl: "https://your-invitation-site.com",
-            webUrl: "https://your-invitation-site.com",
+            mobileWebUrl: siteUrl,
+            webUrl: siteUrl,
           },
         },
       ],

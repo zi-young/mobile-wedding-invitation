@@ -6,11 +6,10 @@ import { ChevronDown, X, ArrowLeft, ArrowRight, ChevronUp } from "lucide-react"
 
 const galleryImages = [
   "/KakaoTalk_20250615_173319252_수정.jpg",
-
   "/SML07021.jpg",
   "/SML05620.jpg",
   "/SML05276.jpg",
-  "/SML04459_수정.jpg",
+  "/c2ade63340724647bd63a62621766175_합성.jpg",
   "/SML04275_수정.jpg",
   "/SML04195.jpg",
   "/SML04145.jpg",
@@ -133,7 +132,7 @@ export default function GallerySection() {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="overflow-hidden rounded-lg cursor-pointer aspect-square border border-wedding-primary/20"
+              className="overflow-hidden border rounded-lg cursor-pointer aspect-square border-wedding-primary/20"
               onClick={() => setSelectedImage(index)}
             >
               <img
@@ -148,7 +147,7 @@ export default function GallerySection() {
         <div className="text-center">
           <button
             onClick={() => setShowAll(!showAll)}
-            className="inline-flex items-center space-x-2 text-wedding-secondary transition-colors hover:text-wedding-primary"
+            className="inline-flex items-center space-x-2 transition-colors text-wedding-secondary hover:text-wedding-primary"
           >
             <span>{showAll ? '닫기' : '더보기'}</span>
             {showAll ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -168,7 +167,7 @@ export default function GallerySection() {
           {/* 닫기 버튼 */}
           <button
             onClick={() => setSelectedImage(null)}
-            className="absolute z-10 text-white top-4 right-4 hover:text-wedding-light transition-colors p-2 rounded-full bg-black/50 hover:bg-black/70"
+            className="absolute z-10 p-2 text-white transition-colors rounded-full top-4 right-4 hover:text-wedding-light bg-black/50 hover:bg-black/70"
             aria-label="닫기"
           >
             <X className="w-6 h-6" />
@@ -177,7 +176,7 @@ export default function GallerySection() {
           {/* 이전 버튼 */}
           <button
             onClick={handlePrevious}
-            className="absolute z-10 text-white left-4 top-1/2 transform -translate-y-1/2 hover:text-wedding-light transition-colors p-2 rounded-full bg-black/50 hover:bg-black/70"
+            className="absolute z-10 p-2 text-white transition-colors transform -translate-y-1/2 rounded-full left-4 top-1/2 hover:text-wedding-light bg-black/50 hover:bg-black/70"
             aria-label="이전 사진"
           >
             <ArrowLeft className="w-6 h-6" />
@@ -186,7 +185,7 @@ export default function GallerySection() {
           {/* 다음 버튼 */}
           <button
             onClick={handleNext}
-            className="absolute z-10 text-white right-4 top-1/2 transform -translate-y-1/2 hover:text-wedding-light transition-colors p-2 rounded-full bg-black/50 hover:bg-black/70"
+            className="absolute z-10 p-2 text-white transition-colors transform -translate-y-1/2 rounded-full right-4 top-1/2 hover:text-wedding-light bg-black/50 hover:bg-black/70"
             aria-label="다음 사진"
           >
             <ArrowRight className="w-6 h-6" />
@@ -200,7 +199,7 @@ export default function GallerySection() {
           />
 
           {/* 이미지 정보 */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white bg-black/50 px-4 py-2 rounded-full">
+          <div className="absolute px-4 py-2 text-white transform -translate-x-1/2 rounded-full bottom-4 left-1/2 bg-black/50">
             <span className="text-sm">
               {selectedImage + 1} / {galleryImages.length}
             </span>

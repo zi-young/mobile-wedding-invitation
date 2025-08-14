@@ -14,7 +14,7 @@ const notoSansKr = Noto_Sans_KR({
 })
 
 export const metadata: Metadata = {
-  title: " ♥ ",
+  title: "우만경 🩷 박희영 결혼합니다 ",
   description: "2025년 11월 08일 토요일 오후 02시 30분",
   generator: "v0.dev",
   viewport: {

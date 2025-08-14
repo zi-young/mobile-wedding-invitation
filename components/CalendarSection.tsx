@@ -58,7 +58,7 @@ export default function CalendarSection() {
           <span
             className={`flex items-center justify-center w-9 h-9 text-sm rounded-full transition
               ${isWeddingDay ? "bg-wedding-primary text-wedding-white font-bold shadow-md" : ""}
-              ${isToday ? "bg-wedding-secondary/20 text-wedding-secondary font-semibold" : "hover:bg-wedding-light"}
+              ${isToday ? "bg-wedding-secondary/20 text-wedding-secondary font-semibold" : ""}
             `}
           >
             {day}
@@ -93,7 +93,7 @@ export default function CalendarSection() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
         viewport={{ once: true }}
-        className="p-6 mb-8 bg-wedding-white shadow-md rounded-xl border border-wedding-primary/20"
+        className="p-6 mb-8 border shadow-md bg-wedding-white rounded-xl border-wedding-primary/20"
       >
         <table className="w-full table-fixed">
           <thead>

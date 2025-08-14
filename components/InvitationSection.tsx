@@ -40,15 +40,13 @@ export default function InvitationSection() {
         <div className="flex items-center justify-center space-x-2">
           <span>우학준</span>
           <span className="text-wedding-secondary">·</span>
-          <span>김진애</span>
-          <span>의 장남</span>
+          <span>김진애의 장남</span>
           <span className="font-medium text-wedding-secondary">우만경</span>
         </div>
         <div className="flex items-center justify-center space-x-2">
           <span>박형철</span>
           <span className="text-wedding-secondary">·</span>
-          <span>다이쿠지에코</span>
-          <span>의 차녀</span>
+          <span>다이쿠지에코의 차녀</span>
           <span className="font-medium text-wedding-secondary">박희영</span>
         </div>
       </motion.div>
