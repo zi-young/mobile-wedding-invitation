@@ -4,8 +4,6 @@
 const isProd = process.env.NODE_ENV === 'production'
 
 const nextConfig = {
-  // GitHub Pages 배포용 정적 export
-  output: isProd ? 'export' : undefined,
 
   // ESLint 빌드 시 경고/오류 무시
   eslint: { ignoreDuringBuilds: true },
