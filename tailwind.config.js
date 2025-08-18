@@ -90,6 +90,9 @@ module.exports = {
       maxWidth: {
         425: "425px",
       },
+      fontSize: {
+        '15px': '15px', 
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

@@ -113,7 +113,7 @@ export default function GallerySection() {
         viewport={{ once: true }}
         className="mb-8 text-center"
       >
-        {/* <div className="text-sm tracking-[3px] text-wedding-secondary mb-2">GALLERY</div> */}
+        {/* <div className="text-[15px] tracking-[3px] text-wedding-secondary mb-2">GALLERY</div> */}
         <h2 className="text-xl font-medium text-wedding-primary">사진</h2>
       </motion.div>
 
@@ -200,7 +200,7 @@ export default function GallerySection() {
 
           {/* 이미지 정보 */}
           <div className="absolute px-4 py-2 text-white transform -translate-x-1/2 rounded-full bottom-4 left-1/2 bg-black/50">
-            <span className="text-sm">
+            <span className="text-[15px]">
               {selectedImage + 1} / {galleryImages.length}
             </span>
           </div>

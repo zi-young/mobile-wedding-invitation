@@ -139,7 +139,7 @@ export default function LocationSection() {
           <div ref={mapContainerRef} className="w-full h-72 bg-wedding-primary/5" />
         </div>
         {mapLoadError && (
-          <div className="text-sm text-center text-red-600">{mapLoadError}</div>
+          <div className="text-[15px] text-center text-red-600">{mapLoadError}</div>
         )}
       </motion.div>
 
@@ -156,23 +156,23 @@ export default function LocationSection() {
             <Navigation className="w-5 h-5 mr-2" />
             내비게이션
           </h3>
-          <p className="mb-3 text-sm text-wedding-primary">원하시는 앱을 선택하시면 길안내가 시작됩니다.</p>
+          <p className="mb-3 text-[15px] text-wedding-primary">원하시는 앱을 선택하시면 길안내가 시작됩니다.</p>
           <div className="flex space-x-2">
             <button
               onClick={() => openNavigation("naver")}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white transition-colors bg-red-600 rounded-lg hover:bg-red-700"
+              className="flex-1 px-4 py-2 text-[15px] font-medium text-white transition-colors bg-red-600 rounded-lg hover:bg-red-700"
             >
               네이버지도
             </button>
             <button
               onClick={() => openNavigation("kakao")}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white transition-colors bg-yellow-500 rounded-lg hover:bg-yellow-600"
+              className="flex-1 px-4 py-2 text-[15px] font-medium text-white transition-colors bg-yellow-500 rounded-lg hover:bg-yellow-600"
             >
               카카오맵
             </button>
             <button
               onClick={() => openNavigation("google")}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700"
+              className="flex-1 px-4 py-2 text-[15px] font-medium text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700"
             >
               구글맵
             </button>
@@ -185,7 +185,7 @@ export default function LocationSection() {
             <Car className="w-5 h-5 mr-2" />
             자가용
           </h3>
-          <div className="space-y-1 text-sm text-wedding-primary">
+          <div className="space-y-1 text-[15px] text-wedding-primary">
             <p>
               네비게이션에서 <strong>'더포레스트웨딩'</strong> 또는 <strong>'가든아트아뜰리에'</strong> 검색
             </p>
@@ -198,7 +198,7 @@ export default function LocationSection() {
             <Train className="w-5 h-5 mr-2" />
             대중교통
           </h3>
-          <div className="space-y-3 text-sm text-wedding-primary">
+          <div className="space-y-3 text-[15px] text-wedding-primary">
             <div>
               <p className="font-medium">신분당선 동천역 1번출구 앞 17-1번 버스 탑승</p>
               <p>→ '선댄스'정류장 하차 → 오월식당 방향 직진 도보 5분</p>
@@ -210,7 +210,7 @@ export default function LocationSection() {
             <Bus className="w-5 h-5 mr-2" />
             셔틀버스
           </h3>
-          <div className="pb-4 space-y-3 text-sm text-wedding-primary">
+          <div className="pb-4 space-y-3 text-[15px] text-wedding-primary">
             <div>
               <p className="font-medium">신분당선 동천역 1번출구 앞 셔틀버스 탑승</p>
               <p>(더포레스트웨딩 붙어있음)</p>

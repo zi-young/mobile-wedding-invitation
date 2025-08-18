@@ -5,11 +5,11 @@ import { motion } from "framer-motion"
 import { ChevronDown, Copy, Check } from "lucide-react"
 
 const accounts = {
-  groom: [
-    { name: "박충용", bank: "국민", number: "123" },
-    { name: "서희영", bank: "우리", number: "123" },
-    { name: "우만경", bank: "국민", number: "123" },
-  ],
+  // groom: [
+  //   { name: "박충용", bank: "국민", number: "123" },
+  //   { name: "서희영", bank: "우리", number: "123" },
+  //   { name: "우만경", bank: "국민", number: "123" },
+  // ],
   bride: [
     { name: "박형철", bank: "농협", number: "207179-52-261426" },
     { name: "다이쿠지에코", bank: "농협", number: "170781-56-082109" },
@@ -18,7 +18,8 @@ const accounts = {
 }
 
 export default function AccountSection() {
-  const [openSection, setOpenSection] = useState<string | null>(null)
+  const [groomOpen, setGroomOpen] = useState(false)
+  const [brideOpen, setBrideOpen] = useState(false)
   const [copiedAccount, setCopiedAccount] = useState<string | null>(null)
 
   const copyToClipboard = (text: string, accountId: string) => {
@@ -28,9 +29,17 @@ export default function AccountSection() {
     })
   }
 
-  const toggleSection = (section: string) => {
-    setOpenSection(openSection === section ? null : section)
+  const toggleGroom = () => {
+    console.log('Toggle groom clicked, current state:', groomOpen)
+    setGroomOpen(!groomOpen)
   }
+
+  const toggleBride = () => {
+    console.log('Toggle bride clicked, current state:', brideOpen)
+    setBrideOpen(!brideOpen)
+  }
+
+  console.log('Current openSection state:', groomOpen || brideOpen)
 
   return (
     <section className="px-6 py-12 bg-wedding-white">
@@ -41,8 +50,13 @@ export default function AccountSection() {
         viewport={{ once: true }}
         className="mb-8 text-center"
       >
-        {/* <div className="text-sm tracking-[3px] text-wedding-secondary mb-2">ACCOUNT</div> */}
-        <h2 className="text-xl font-medium text-wedding-primary">마음 전하실 곳</h2>
+        <h2 className="text-2xl font-medium text-wedding-primary">마음 전하실 곳</h2>
+        <p className="mt-3 mb-0 text-base text-wedding-secondary">
+          축하의 마음만으로도 충분합니다.
+        </p>
+        <p className="text-base text-wedding-secondary">
+          <b>화환</b>은 정중히 사양합니다.
+        </p>
       </motion.div>
 
       <motion.div
@@ -55,20 +69,20 @@ export default function AccountSection() {
         {/* Groom Side */}
         {/* <div className="overflow-hidden border rounded-lg border-wedding-primary/20">
           <button
-            onClick={() => toggleSection("groom")}
-            className="flex items-center justify-between w-full px-4 py-3 transition-colors"
+            onClick={toggleGroom}
+            className="flex items-center justify-between w-full px-4 py-3 transition-colors hover:bg-wedding-light/30"
           >
-            <span className="font-medium text-wedding-primary">신랑측</span>
-            <ChevronDown className={`w-5 h-5 transition-transform text-wedding-primary ${openSection === "groom" ? "rotate-180" : ""}`} />
+            <span className="text-base font-medium text-wedding-primary">신랑측</span>
+            <ChevronDown className={`w-5 h-5 transition-transform text-wedding-primary ${groomOpen ? "rotate-180" : ""}`} />
           </button>
-          {openSection === "groom" && (
+          {groomOpen && (
             <div className="border-t border-wedding-primary/20">
               {accounts.groom.map((account, index) => (
                 <div key={index} className="px-4 py-3 border-b border-wedding-primary/10 last:border-b-0">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <span className="font-medium text-wedding-primary">{account.name}</span>
-                      <span className="text-sm text-wedding-secondary">
+                      <span className="text-base font-medium text-wedding-primary">{account.name}</span>
+                      <span className="text-base text-wedding-secondary">
                         {account.bank} {account.number}
                       </span>
                     </div>
@@ -92,20 +106,20 @@ export default function AccountSection() {
         {/* Bride Side */}
         <div className="overflow-hidden border rounded-lg border-wedding-primary/20">
           <button
-            onClick={() => toggleSection("bride")}
-            className="flex items-center justify-between w-full px-4 py-3 transition-colors"
+            onClick={toggleBride}
+            className="flex items-center justify-between w-full px-4 py-3 transition-colors hover:bg-wedding-light/30"
           >
-            <span className="font-medium text-wedding-primary">신부측</span>
-            <ChevronDown className={`w-5 h-5 transition-transform text-wedding-primary ${openSection === "bride" ? "rotate-180" : ""}`} />
+            <span className="text-base font-medium text-wedding-primary">신부측</span>
+            <ChevronDown className={`w-5 h-5 transition-transform text-wedding-primary ${brideOpen ? "rotate-180" : ""}`} />
           </button>
-          {openSection === "bride" && (
+          {brideOpen && (
             <div className="border-t border-wedding-primary/20">
               {accounts.bride.map((account, index) => (
                 <div key={index} className="px-4 py-3 border-b border-wedding-primary/10 last:border-b-0">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <span className="font-medium text-wedding-primary">{account.name}</span>
-                      <span className="text-sm text-wedding-secondary">
+                      <span className="text-base font-medium text-wedding-primary">{account.name}</span>
+                      <span className="text-base text-wedding-secondary">
                         {account.bank} {account.number}
                       </span>
                     </div>

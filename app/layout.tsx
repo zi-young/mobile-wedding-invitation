@@ -32,6 +32,8 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ko" className={`${notoSansKr.variable}`}>
+      <head>
+      </head>
       <body className="font-sans antialiased">
         <SecurityProvider>
           {children}

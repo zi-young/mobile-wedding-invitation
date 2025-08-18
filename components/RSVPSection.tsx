@@ -10,7 +10,7 @@ export default function RSVPSection() {
   const [isSuccessModal, setIsSuccessModal] = useState(false)
   const [formData, setFormData] = useState({
     attendance: "true",
-    side: "bride",
+    side: "groom",
     name: "",
     guestCount: "1",
     companionName: "",
@@ -68,12 +68,11 @@ export default function RSVPSection() {
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    const inputElement = e.target as HTMLInputElement
-    const newValue = inputElement.type === "checkbox" || inputElement.type === "radio" ? inputElement.checked : value
-
+    const { name, value, type, checked } = e.target as HTMLInputElement
+    const newValue = type === "checkbox" ? checked : value
     setFormData(prev => ({ ...prev, [name]: newValue }))
   }
+  
 
   return (
     <section className="px-6 py-12 bg-wedding-light">
@@ -84,9 +83,9 @@ export default function RSVPSection() {
         viewport={{ once: true }}
         className="mb-8 text-center"
       >
-        <div className="text-sm tracking-[3px] text-wedding-secondary mb-2">R.S.V.P.</div>
+        <div className="text-[15px] tracking-[3px] text-wedding-secondary mb-2">R.S.V.P.</div>
         <h2 className="text-xl font-medium text-wedding-primary">참석 의사 전달</h2>
-        <p className="mt-2 text-sm text-wedding-primary">
+        <p className="mt-2 text-[15px] text-wedding-primary">
           신랑, 신부에게 참석의사를<br />미리 전달할 수 있어요.
         </p>
       </motion.div>
@@ -122,7 +121,7 @@ export default function RSVPSection() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* 참석 가능 여부 */}
                 <div>
-                  <label className="block mb-3 text-sm font-medium text-wedding-primary">가능 여부를 선택해 주세요.</label>
+                  <label className="block mb-3 text-[15px] font-medium text-wedding-primary">가능 여부를 선택해 주세요.</label>
                   <div className="flex space-x-4">
                     <label className="flex items-center">
                       <input
@@ -151,7 +150,7 @@ export default function RSVPSection() {
 
                 {/* 신랑/신부 선택 */}
                 <div>
-                  <label className="block mb-3 text-sm font-medium text-wedding-primary">신랑 & 신부에게 전달될 정보를 입력해 주세요.</label>
+                  <label className="block mb-3 text-[15px] font-medium text-wedding-primary">신랑 & 신부에게 전달될 정보를 입력해 주세요.</label>
                   <div className="flex space-x-4">
                     <label className="flex items-center">
                       <input
@@ -180,7 +179,7 @@ export default function RSVPSection() {
 
                 {/* 이름 */}
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-wedding-primary">
+                  <label className="block mb-2 text-[15px] font-medium text-wedding-primary">
                     성함 <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -195,7 +194,7 @@ export default function RSVPSection() {
 
                 {/* 추가인원 */}
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-wedding-primary">추가인원</label>
+                  <label className="block mb-2 text-[15px] font-medium text-wedding-primary">추가인원</label>
                   <select
                     name="guestCount"
                     value={formData.guestCount}
@@ -213,7 +212,7 @@ export default function RSVPSection() {
                 {/* 동행인 이름 */}
                 {Number.parseInt(formData.guestCount) > 1 && (
                   <div>
-                    <label className="block mb-2 text-sm font-medium text-wedding-primary">동행인 성함</label>
+                    <label className="block mb-2 text-[15px] font-medium text-wedding-primary">동행인 성함</label>
                     <input
                       type="text"
                       name="companionName"
@@ -227,7 +226,7 @@ export default function RSVPSection() {
 
                 {/* 개인정보 동의 */}
                 <div className="p-4 border rounded-lg bg-wedding-light border-wedding-primary/20">
-                  <div className="mb-2 text-sm font-medium text-wedding-primary">
+                  <div className="mb-2 text-[15px] font-medium text-wedding-primary">
                     개인정보 수집 및 이용 동의(필수) <span className="text-red-500">*</span>
                   </div>
                   <p className="mb-3 text-xs text-wedding-secondary">
@@ -242,7 +241,7 @@ export default function RSVPSection() {
                       onChange={handleInputChange}
                       className="mr-2 text-wedding-primary focus:ring-wedding-primary"
                     />
-                    <span className="text-sm text-wedding-primary">동의합니다.</span>
+                    <span className="text-[15px] text-wedding-primary">동의합니다.</span>
                   </label>
                 </div>
 

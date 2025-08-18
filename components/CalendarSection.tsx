@@ -56,7 +56,7 @@ export default function CalendarSection() {
       calendar.push(
         <td key={day} className="py-1 text-center">
           <span
-            className={`flex items-center justify-center w-9 h-9 text-sm rounded-full transition
+            className={`flex items-center justify-center w-9 h-9 text-[15px] rounded-full transition
               ${isWeddingDay ? "bg-wedding-primary text-wedding-white font-bold shadow-md" : ""}
               ${isToday ? "bg-wedding-secondary/20 text-wedding-secondary font-semibold" : ""}
             `}
@@ -97,7 +97,7 @@ export default function CalendarSection() {
       >
         <table className="w-full table-fixed">
           <thead>
-            <tr className="text-sm text-wedding-secondary">
+            <tr className="text-[15px] text-wedding-secondary">
               <th className="py-2 text-red-500">일</th>
               <th className="py-2">월</th>
               <th className="py-2">화</th>
@@ -107,7 +107,7 @@ export default function CalendarSection() {
               <th className="py-2 text-blue-500">토</th>
             </tr>
           </thead>
-          <tbody className="text-sm text-wedding-primary">{generateCalendar()}</tbody>
+          <tbody className="text-[15px] text-wedding-primary">{generateCalendar()}</tbody>
         </table>
       </motion.div>
     </section>

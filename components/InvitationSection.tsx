@@ -12,7 +12,7 @@ export default function InvitationSection() {
         viewport={{ once: true }}
         className="mb-8 text-center"
       >
-        <div className="text-sm tracking-[3px] text-wedding-secondary mb-2">INVITATION</div>
+        <div className="text-[15px] tracking-[3px] text-wedding-secondary mb-2">INVITATION</div>
       </motion.div>
 
       <motion.div
@@ -22,7 +22,7 @@ export default function InvitationSection() {
         viewport={{ once: true }}
         className="mb-8 leading-relaxed text-center text-wedding-primary"
       >
-        <div className="my-6 text-sm leading-relaxed">
+        <div className="my-6 text-[15px] leading-relaxed">
           <p>평생 서로를 아끼며 살겠다는</p>
           <p>두 사람의 약속을 지켜봐 주십시오.</p>
           <p>소중한 분들과 함께 기쁨을 나누고 싶습니다.</p>
@@ -35,7 +35,7 @@ export default function InvitationSection() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.6 }}
         viewport={{ once: true }}
-        className="space-y-2 text-sm text-center text-wedding-primary"
+        className="space-y-2 text-[15px] text-center text-wedding-primary"
       >
         <div className="flex items-center justify-center space-x-2">
           <span>우학준</span>
