@@ -30,7 +30,7 @@ export default function ShareSection() {
       return
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
     const imageUrl = `${siteUrl}/kakao_img.jpg` // public 폴더 안 이미지
 
     window.Kakao.Share.sendDefault({
