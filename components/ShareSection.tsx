@@ -33,6 +33,9 @@ export default function ShareSection() {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
     const imageUrl = `${siteUrl}/kakao_img.jpg` // public 폴더 안 이미지
 
+    const version = window.location.pathname.includes('/2') ? '2' : ''; // /2만 특별 처리
+    const versionUrl = `${siteUrl}${version ? '/' + version : ''}`;
+
     window.Kakao.Share.sendDefault({
       objectType: "feed",
       content: {
@@ -40,16 +43,16 @@ export default function ShareSection() {
         description: "2025년 11월 08일, 더포레스트웨딩",
         imageUrl,
         link: {
-          mobileWebUrl: siteUrl,
-          webUrl: siteUrl,
+          mobileWebUrl: versionUrl,
+          webUrl: versionUrl,
         },
       },
       buttons: [
         {
           title: "초대장 보기",
           link: {
-            mobileWebUrl: siteUrl,
-            webUrl: siteUrl,
+            mobileWebUrl: versionUrl,
+            webUrl: versionUrl,
           },
         },
       ],
