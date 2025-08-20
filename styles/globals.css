@@ -81,29 +81,14 @@
   }
 }
 
-
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 144 17% 25%;
-    /* ... 네 변수들 그대로 ... */
-  }
-
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    /* ... dark 변수들 그대로 ... */
-  }
-
-  /* ✅ html, body에 강제로 색상 지정 */
   html, body {
     @apply p-0 m-0;
-    background-color: hsl(var(--background));
+    background-color: transparent !important; /* ✅ 배경 완전 제거 */
     color: hsl(var(--foreground));
     min-height: 100%;
   }
 
-  /* ✅ 스크롤 튕김 시에도 배경색 유지 */
   body {
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;

@@ -45,6 +45,7 @@
   html {
     overscroll-behavior: none;
     height: 100%;
+    background: transparent !important; /* ✅ 노란 배경 방지 */
   }
 
   body {
