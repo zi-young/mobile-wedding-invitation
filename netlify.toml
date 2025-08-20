@@ -1,7 +1,7 @@
 [build]
-  command = "npm run build"
-  publish = ".next"
+    command = "npm run build"
+    publish = ".next"
+    functions = "netlify/functions"
 
-[dev]
-  command = "npm run dev"
-  port = 8888
+[[plugins]]
+    package = "@netlify/plugin-nextjs"
