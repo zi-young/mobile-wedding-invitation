@@ -99,8 +99,17 @@ export default function LocationSection() {
         break
       case "kakao":
         if (isMobile) {
-          // 모바일에서는 위도/경도 기반 링크 사용
-          window.open(`https://map.kakao.com/link/to/더포레스트웨딩,${fixedLat},${fixedLng}`)
+          // 모바일에서는 카카오맵 앱 딥링크 사용
+          const kakaoMapUrl = `kakaomap://look?p=${fixedLat},${fixedLng}`
+          const webUrl = `https://map.kakao.com/link/to/더포레스트웨딩,${fixedLat},${fixedLng}`
+          
+          // 앱이 설치되어 있으면 앱으로, 없으면 웹으로
+          window.location.href = kakaoMapUrl
+          
+          // 앱이 없을 경우를 대비해 3초 후 웹으로 리다이렉트
+          setTimeout(() => {
+            window.location.href = webUrl
+          }, 3000)
         } else {
           // PC에서는 주소 검색 링크 사용
           window.open(`https://map.kakao.com/link/search/${encodedAddress}`)
