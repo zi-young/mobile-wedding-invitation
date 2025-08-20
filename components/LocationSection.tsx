@@ -9,6 +9,7 @@ export default function LocationSection() {
   const [mapLoadError, setMapLoadError] = useState<string | null>(null)
 
   const NAVER_MAP_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID
+  const KAKAO_JS_KEY = process.env.NEXT_PUBLIC_KAKAO_JS_KEY
   const address = "경기도 용인시 수지구 동천로 425-2"
 
   // 고정 좌표 (직접 확인한 정확한 위도/경도)
@@ -65,6 +66,13 @@ export default function LocationSection() {
     }
   }, [NAVER_MAP_CLIENT_ID])
 
+  useEffect(() => {
+    // 카카오 내비게이션 SDK 로드
+    if (KAKAO_JS_KEY) {
+      loadKakaoNaviSDK(KAKAO_JS_KEY)
+    }
+  }, [KAKAO_JS_KEY])
+
   function loadNaverMapsScript(clientId: string): Promise<void> {
     const existing = document.querySelector<HTMLScriptElement>(
       'script[src^="https://openapi.map.naver.com/openapi/v3/maps.js"]'
@@ -89,6 +97,36 @@ export default function LocationSection() {
     })
   }
 
+  function loadKakaoNaviSDK(jsKey: string): Promise<void> {
+    const existing = document.querySelector<HTMLScriptElement>(
+      'script[src^="https://developers.kakao.com/sdk/js/kakao.js"]'
+    )
+    return new Promise((resolve, reject) => {
+      if ((window as any).Kakao?.Navi) {
+        resolve()
+        return
+      }
+      if (existing) {
+        existing.addEventListener("load", () => {
+          (window as any).Kakao.init(jsKey)
+          resolve()
+        })
+        existing.addEventListener("error", () => reject(new Error("script error")))
+        return
+      }
+      const script = document.createElement("script")
+      script.src = "https://developers.kakao.com/sdk/js/kakao.js"
+      script.async = true
+      script.defer = true
+      script.onload = () => {
+        (window as any).Kakao.init(jsKey)
+        resolve()
+      }
+      script.onerror = () => reject(new Error("script error"))
+      document.head.appendChild(script)
+    })
+  }
+
   const openNavigation = (type: string) => {
     const encodedAddress = encodeURIComponent(address)
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
@@ -98,20 +136,16 @@ export default function LocationSection() {
         window.open(`https://map.naver.com/v5/search/${encodedAddress}`)
         break
       case "kakao":
-        if (isMobile) {
-          // 모바일에서는 카카오맵 앱 딥링크 사용
-          const kakaoMapUrl = `kakaomap://look?p=${fixedLat},${fixedLng}`
-          const webUrl = `https://map.kakao.com/link/to/더포레스트웨딩,${fixedLat},${fixedLng}`
-          
-          // 앱이 설치되어 있으면 앱으로, 없으면 웹으로
-          window.location.href = kakaoMapUrl
-          
-          // 앱이 없을 경우를 대비해 3초 후 웹으로 리다이렉트
-          setTimeout(() => {
-            window.location.href = webUrl
-          }, 3000)
+        if (isMobile && (window as any).Kakao?.Navi) {
+          // 모바일에서 카카오 내비게이션 SDK 사용
+          (window as any).Kakao.Navi.start({
+            name: '더포레스트웨딩',
+            x: fixedLng,
+            y: fixedLat,
+            coordType: 'WGS84'
+          })
         } else {
-          // PC에서는 주소 검색 링크 사용
+          // PC 또는 SDK 로드 실패 시 웹 링크 사용
           window.open(`https://map.kakao.com/link/search/${encodedAddress}`)
         }
         break
