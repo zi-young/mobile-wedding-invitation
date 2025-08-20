@@ -37,11 +37,11 @@ export default function RSVPSection() {
 
     try {
       console.log("전송할 데이터:", formData)
-      const response = await fetch("/api/proxy", {
+      const response = await fetch("/.netlify/functions/proxy", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-      })
+      });      
 
       const textResult = await response.text()
       console.log("Google Apps Script 응답 (텍스트):", textResult)
