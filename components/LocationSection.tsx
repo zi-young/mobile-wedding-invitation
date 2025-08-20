@@ -97,7 +97,7 @@ export default function LocationSection() {
         window.open(`https://map.naver.com/v5/search/${encodedAddress}`)
         break
       case "kakao":
-        window.open(`https://map.kakao.com/link/search/${encodedAddress}`)
+        window.open(`https://map.kakao.com/link/map/더포레스트웨딩,${fixedLat},${fixedLng}`)
         break
       case "google":
         window.open(`https://maps.google.com/maps?q=${encodedAddress}`)
