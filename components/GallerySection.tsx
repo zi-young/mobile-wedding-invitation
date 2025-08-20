@@ -9,7 +9,7 @@ const galleryImages = [
   "/SML07021.jpg",
   "/SML05620.jpg",
   "/SML05276.jpg",
-  "/c2ade63340724647bd63a62621766175_합성.jpg",
+  "/c2ade63340724647bd63a62621766175.jpg",
   "/SML04275_수정.jpg",
   "/SML04195.jpg",
   "/SML04145.jpg",
