@@ -91,13 +91,20 @@ export default function LocationSection() {
 
   const openNavigation = (type: string) => {
     const encodedAddress = encodeURIComponent(address)
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
     switch (type) {
       case "naver":
         window.open(`https://map.naver.com/v5/search/${encodedAddress}`)
         break
       case "kakao":
-        window.open(`https://map.kakao.com/link/map/더포레스트웨딩,${fixedLat},${fixedLng}`)
+        if (isMobile) {
+          // 모바일에서는 위도/경도 기반 링크 사용
+          window.open(`https://map.kakao.com/link/to/더포레스트웨딩,${fixedLat},${fixedLng}`)
+        } else {
+          // PC에서는 주소 검색 링크 사용
+          window.open(`https://map.kakao.com/link/search/${encodedAddress}`)
+        }
         break
       case "google":
         window.open(`https://maps.google.com/maps?q=${encodedAddress}`)
