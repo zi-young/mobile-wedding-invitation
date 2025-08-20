@@ -12,8 +12,8 @@ export default function LocationSection() {
   const address = "경기도 용인시 수지구 동천로 425-2"
 
   // 고정 좌표 (직접 확인한 정확한 위도/경도)
-  const fixedLat = 37.342488  // 정확한 값으로 수정하세요
-  const fixedLng = 127.060080  // 정확한 값으로 수정하세요
+  const fixedLat = 37.342974  // 정확한 값으로 수정하세요
+  const fixedLng = 127.060407  // 정확한 값으로 수정하세요
 
   useEffect(() => {
     let isCancelled = false

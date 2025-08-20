@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 255 255 255;
+    --background: 0 0% 100%;
     --foreground: 29 89 31;
     --card: 255 255 255;
     --card-foreground: 29 89 31;
@@ -63,7 +63,7 @@
     /* 오버스크롤 효과 제거 */
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
-    background-color: rgb(var(--background));
+    background-color: hsl(var(--background));
     /* 기본 텍스트 크기 및 줄간격 조정 */
     font-size: 1rem;
     line-height: 1.6;
