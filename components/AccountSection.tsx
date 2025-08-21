@@ -5,11 +5,11 @@ import { motion } from "framer-motion"
 import { ChevronDown, Copy, Check } from "lucide-react"
 
 const accounts = {
-  // groom: [
+  groom: [
   //   { name: "박충용", bank: "국민", number: "123" },
   //   { name: "서희영", bank: "우리", number: "123" },
-  //   { name: "우만경", bank: "국민", number: "123" },
-  // ],
+    { name: "우만경", bank: "국민", number: "484602-04-078438" },
+  ],
   bride: [
     { name: "박형철", bank: "농협", number: "207179-52-261426" },
     { name: "다이쿠지에코", bank: "농협", number: "170781-56-082109" },
@@ -67,7 +67,7 @@ export default function AccountSection() {
         className="space-y-4"
       >
         {/* Groom Side */}
-        {/* <div className="overflow-hidden border rounded-lg border-wedding-primary/20">
+        <div className="overflow-hidden border rounded-lg border-wedding-primary/20">
           <button
             onClick={toggleGroom}
             className="flex items-center justify-between w-full px-4 py-3 transition-colors hover:bg-wedding-light/30"
@@ -101,7 +101,7 @@ export default function AccountSection() {
               ))}
             </div>
           )}
-        </div> */}
+        </div>
 
         {/* Bride Side */}
         <div className="overflow-hidden border rounded-lg border-wedding-primary/20">

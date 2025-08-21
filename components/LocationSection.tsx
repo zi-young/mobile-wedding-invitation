@@ -91,43 +91,56 @@ export default function LocationSection() {
 
   const openNavigation = (type: string) => {
     const encodedAddress = encodeURIComponent(address);
-    const destination = "더포레스트웨딩"; // 목적지 이름으로 수정
-
-    // 모바일 환경 체크
+    const destination = "더포레스트웨딩"; 
     const isMobile = /Android|iPhone|iPod|iPad/.test(navigator.userAgent);
-
-    switch (type) {
-      case "naver":
-        if (isMobile) {
-          // 네이버 지도 앱으로 이동 (URL scheme)
-          window.location.href = `nmap://place?lat=${fixedLat}&lng=${fixedLng}&name=${encodeURIComponent(destination)}&appname=your_app_name`;
-        } else {
-          // 웹 환경 (데스크톱)
-          window.open(`https://map.naver.com/v5/search/${encodedAddress}`);
-        }
-        break;
-      case "kakao":
-        if (isMobile) {
-          // 카카오맵 앱으로 이동 (URL scheme)
-          // 카카오 개발자 센터에 앱 키, URL 스키마 등록 필수
-          window.location.href = `kakaomap://look?p=${fixedLat},${fixedLng}`;
-        } else {
-          // 웹 환경 (데스크톱)
-          window.open(`https://map.kakao.com/link/search/${encodedAddress}`);
-        }
-        break;
-      case "google":
-        if (isMobile) {
-          // 구글맵 앱으로 이동 (URL scheme)
-          window.location.href = `comgooglemaps://?q=${encodedAddress}`;
-        } else {
-          // 웹 환경 (데스크톱)
-          window.open(`https://www.google.com/maps/search/${encodedAddress}`);
-        }
-        break;
+  
+    const openWebFallback = (url: string) => {
+      window.open(url, "_blank");
+    };
+  
+    if (type === "naver") {
+      if (isMobile) {
+        const timeout = setTimeout(() => {
+          // 앱 없으면 웹 fallback
+          openWebFallback(`https://map.naver.com/v5/search/${encodedAddress}`);
+        }, 2000);
+        window.location.href = `nmap://place?lat=${fixedLat}&lng=${fixedLng}&name=${encodeURIComponent(destination)}&appname=your_app_name`;
+        const handleVisibilityChange = () => {
+          if (document.hidden) clearTimeout(timeout);
+        };
+        document.addEventListener("visibilitychange", handleVisibilityChange, { once: true });
+      } else {
+        openWebFallback(`https://map.naver.com/v5/search/${encodedAddress}`);
+      }
+    } else if (type === "kakao") {
+      if (isMobile) {
+        const timeout = setTimeout(() => {
+          openWebFallback(`https://map.kakao.com/link/search/${encodedAddress}`);
+        }, 2000);
+        window.location.href = `kakaomap://look?p=${fixedLat},${fixedLng}`;
+        const handleVisibilityChange = () => {
+          if (document.hidden) clearTimeout(timeout);
+        };
+        document.addEventListener("visibilitychange", handleVisibilityChange, { once: true });
+      } else {
+        openWebFallback(`https://map.kakao.com/link/search/${encodedAddress}`);
+      }
+    } else if (type === "google") {
+      if (isMobile) {
+        const timeout = setTimeout(() => {
+          openWebFallback(`https://www.google.com/maps/search/${encodedAddress}`);
+        }, 2000);
+        window.location.href = `comgooglemaps://?q=${encodedAddress}`;
+        const handleVisibilityChange = () => {
+          if (document.hidden) clearTimeout(timeout);
+        };
+        document.addEventListener("visibilitychange", handleVisibilityChange, { once: true });
+      } else {
+        openWebFallback(`https://www.google.com/maps/search/${encodedAddress}`);
+      }
     }
   };
-
+  
   return (
     <section className="px-6 bg-wedding-light">
       <motion.div

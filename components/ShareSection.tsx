@@ -39,7 +39,7 @@ export default function ShareSection() {
     window.Kakao.Share.sendDefault({
       objectType: "feed",
       content: {
-        title: "우만경 🩷 박희영 결혼합니다.",
+        title: "우만경 🩷 박희영",
         description: "2025년 11월 08일, 더포레스트웨딩",
         imageUrl,
         link: {
