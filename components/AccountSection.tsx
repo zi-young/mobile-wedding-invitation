@@ -38,7 +38,6 @@ export default function AccountSection({ currentPageIdentifier }: AccountSection
     accounts = {
       bride: [
         { name: "박형철", bank: "농협", number: "207179-52-261426" },
-        { name: "박지에", bank: "농협", number: "170781-56-082109" },
         { name: "박희영", bank: "신한", number: "110-385-384960" },
       ],
     }
