@@ -33,8 +33,9 @@ export default function ShareSection() {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
     const imageUrl = `${siteUrl}/kakao_img.jpg` // public 폴더 안 이미지
 
-    const version = window.location.pathname.includes('/2') ? '2' : ''; // /2만 특별 처리
-    const versionUrl = `${siteUrl}${version ? '/' + version : ''}`;
+    const path = window.location.pathname; // 현재 path
+    const version = path.startsWith('/1') ? '1' : path.startsWith('/2') ? '2' : path.startsWith('/3') ? '3' : '';
+    const versionUrl = `${siteUrl}${version ? '/' + version : ''}`;    
 
     window.Kakao.Share.sendDefault({
       objectType: "feed",
