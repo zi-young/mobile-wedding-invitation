@@ -51,7 +51,7 @@ export default function InvitationSection({ currentPageIdentifier }: InvitationS
           <span>박형철</span>
           <span className="text-wedding-secondary">·</span>
           <span>
-            {currentPageIdentifier === "3" ? "박지에의 차녀" : "다이쿠지에코의 차녀"}
+            {currentPageIdentifier === "3" ? "박지애의 차녀" : "다이쿠지에코의 차녀"}
           </span>
           <span className="font-medium text-wedding-secondary">박희영</span>
         </div>
