@@ -4,23 +4,45 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { ChevronDown, Copy, Check } from "lucide-react"
 
-const accounts = {
-  groom: [
-  //   { name: "박충용", bank: "국민", number: "123" },
-  //   { name: "서희영", bank: "우리", number: "123" },
-    { name: "우만경", bank: "국민", number: "484602-04-078438" },
-  ],
-  bride: [
-    { name: "박형철", bank: "농협", number: "207179-52-261426" },
-    { name: "다이쿠지에코", bank: "농협", number: "170781-56-082109" },
-    { name: "박희영", bank: "신한", number: "110-385-384960" },
-  ],
+interface Account {
+  name: string
+  bank: string
+  number: string
 }
 
-export default function AccountSection() {
-  const [groomOpen, setGroomOpen] = useState(false)
+interface AccountSectionProps {
+  currentPageIdentifier: string
+}
+
+export default function AccountSection({ currentPageIdentifier }: AccountSectionProps) {
   const [brideOpen, setBrideOpen] = useState(false)
+  const [groomOpen, setGroomOpen] = useState(false)
   const [copiedAccount, setCopiedAccount] = useState<string | null>(null)
+
+  let accounts: { groom?: Account[]; bride?: Account[] } = {}
+
+  // 페이지별 계좌 설정
+  if (currentPageIdentifier === "1") {
+    accounts = {
+      groom: [
+        { name: "우만경", bank: "국민", number: "484602-04-078438" },
+      ],
+      bride: [
+        { name: "다이쿠지에코", bank: "농협", number: "170781-56-082109" },
+        { name: "박희영", bank: "신한", number: "110-385-384960" },
+      ],
+    }
+  } else if (currentPageIdentifier === "2") {
+    accounts = {} 
+  } else {
+    accounts = {
+      bride: [
+        { name: "박형철", bank: "농협", number: "207179-52-261426" },
+        { name: "박지에", bank: "농협", number: "170781-56-082109" },
+        { name: "박희영", bank: "신한", number: "110-385-384960" },
+      ],
+    }
+  }
 
   const copyToClipboard = (text: string, accountId: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -67,42 +89,40 @@ export default function AccountSection() {
         className="space-y-4"
       >
         {/* Groom Side */}
-        <div className="overflow-hidden border rounded-lg border-wedding-primary/20">
-          <button
-            onClick={toggleGroom}
-            className="flex items-center justify-between w-full px-4 py-3 transition-colors hover:bg-wedding-light/30"
-          >
-            <span className="text-base font-medium text-wedding-primary">신랑측</span>
-            <ChevronDown className={`w-5 h-5 transition-transform text-wedding-primary ${groomOpen ? "rotate-180" : ""}`} />
-          </button>
-          {groomOpen && (
-            <div className="border-t border-wedding-primary/20">
-              {accounts.groom.map((account, index) => (
-                <div key={index} className="px-4 py-3 border-b border-wedding-primary/10 last:border-b-0">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <span className="text-base font-medium text-wedding-primary">{account.name}</span>
-                      <span className="text-base text-wedding-secondary">
-                        {account.bank} {account.number}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => copyToClipboard(`${account.bank} ${account.number}`, `groom-${index}`)}
-                      className="p-2 transition-colors rounded-full hover:bg-wedding-light"
-                    >
-                      {copiedAccount === `groom-${index}` ? (
-                        <Check className="w-4 h-4 text-wedding-primary" />
-                      ) : (
-                        <Copy className="w-4 h-4 text-wedding-secondary" />
-                      )}
-                    </button>
-                  </div>
+        {accounts.groom && (
+          <div className="overflow-hidden border rounded-lg border-wedding-primary/20">
+            <button
+              onClick={toggleGroom}
+              className="flex items-center justify-between w-full px-4 py-3 transition-colors hover:bg-wedding-light/30"
+            >
+              <span className="text-base font-medium text-wedding-primary">신랑측</span>
+              <ChevronDown className={`w-5 h-5 transition-transform text-wedding-primary ${groomOpen ? "rotate-180" : ""}`} />
+            </button>
+            {groomOpen && accounts.groom.map((account, index) => (
+            <div key={index} className="px-4 py-3 border-b border-wedding-primary/10 last:border-b-0">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <span className="text-base font-medium text-wedding-primary">{account.name}</span>
+                  <span className="text-base text-wedding-secondary">
+                    {account.bank} {account.number}
+                  </span>
                 </div>
-              ))}
+                <button
+                  onClick={() => copyToClipboard(`${account.bank} ${account.number}`, `groom-${index}`)}
+                  className="p-2 transition-colors rounded-full hover:bg-wedding-light"
+                >
+                  {copiedAccount === `groom-${index}` ? (
+                    <Check className="w-4 h-4 text-wedding-primary" />
+                  ) : (
+                    <Copy className="w-4 h-4 text-wedding-secondary" />
+                  )}
+                </button>
+              </div>
             </div>
-          )}
-        </div>
+          ))}
 
+          </div>
+        )}
         {/* Bride Side */}
         <div className="overflow-hidden border rounded-lg border-wedding-primary/20">
           <button
@@ -114,7 +134,7 @@ export default function AccountSection() {
           </button>
           {brideOpen && (
             <div className="border-t border-wedding-primary/20">
-              {accounts.bride.map((account, index) => (
+              {brideOpen && accounts.bride?.map((account, index) => (
                 <div key={index} className="px-4 py-3 border-b border-wedding-primary/10 last:border-b-0">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">

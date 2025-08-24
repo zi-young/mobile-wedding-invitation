@@ -2,7 +2,11 @@
 
 import { motion } from "framer-motion"
 
-export default function InvitationSection() {
+interface InvitationSectionProps {
+  currentPageIdentifier: string
+}
+
+export default function InvitationSection({ currentPageIdentifier }: InvitationSectionProps) {
   return (
     <section className="px-6 py-12 bg-wedding-white">
       <motion.div
@@ -46,7 +50,9 @@ export default function InvitationSection() {
         <div className="flex items-center justify-center space-x-2">
           <span>박형철</span>
           <span className="text-wedding-secondary">·</span>
-          <span>다이쿠지에코의 차녀</span>
+          <span>
+            {currentPageIdentifier === "3" ? "박지에의 차녀" : "다이쿠지에코의 차녀"}
+          </span>
           <span className="font-medium text-wedding-secondary">박희영</span>
         </div>
       </motion.div>

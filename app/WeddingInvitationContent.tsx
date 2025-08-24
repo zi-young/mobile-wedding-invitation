@@ -23,17 +23,19 @@ export default function WeddingInvitationContent({ currentPageIdentifier }: { cu
     )
   }
 
-  const shouldRenderAccountSection = currentPageIdentifier === "1"
+  const shouldRenderAccountSection = currentPageIdentifier === "1" || currentPageIdentifier === "3"
 
   return (
     <div className="min-h-screen font-sans bg-background">
       <div className="max-w-[425px] mx-auto relative overflow-hidden bg-background">
         <MainHeader />
-        <InvitationSection />
+        <InvitationSection currentPageIdentifier={currentPageIdentifier} />
         <GallerySection />
         <CalendarSection />
         <LocationSection />
-        {shouldRenderAccountSection && <AccountSection />}
+        {shouldRenderAccountSection && (
+          <AccountSection currentPageIdentifier={currentPageIdentifier} />
+        )}
         <RSVPSection />
         <ShareSection />
         <Footer />
