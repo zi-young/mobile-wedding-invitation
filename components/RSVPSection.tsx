@@ -40,13 +40,23 @@ export default function RSVPSection() {
     showAlertModal("참석의사 전달 중...", true)
     setShowModal(false) // 모달 닫기
 
-    // 2️⃣ 백그라운드 전송
-    fetch("/.netlify/functions/proxy", {
+    // 2️⃣ 백그라운드 전송 (타임아웃 설정)
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 15000) // 15초 타임아웃
+
+    fetch("/api/rsvp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
+      signal: controller.signal,
     })
-      .then(res => res.text())
+      .then(res => {
+        clearTimeout(timeoutId)
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`)
+        }
+        return res.text()
+      })
       .then(text => {
         console.log("GAS 응답:", text)
         if (text.includes("success")) {
@@ -60,12 +70,20 @@ export default function RSVPSection() {
             agreed: false,
           })
         } else {
-          showAlertModal("전송에 실패했습니다. Google Apps Script 응답을 확인해주세요.", false)
+          showAlertModal("전송에 실패했습니다. 잠시 후 다시 시도해주세요.", false)
         }
       })
       .catch(err => {
+        clearTimeout(timeoutId)
         console.error(err)
-        showAlertModal("전송 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요.", false)
+        
+        if (err.name === 'AbortError') {
+          showAlertModal("전송 시간이 초과되었습니다. 네트워크 상태를 확인하고 다시 시도해주세요.", false)
+        } else if (err.message.includes('Failed to fetch')) {
+          showAlertModal("네트워크 연결에 실패했습니다. 인터넷 연결을 확인해주세요.", false)
+        } else {
+          showAlertModal("전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.", false)
+        }
       })
       .finally(() => setIsSubmitting(false))
   }

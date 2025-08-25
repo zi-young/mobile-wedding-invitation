@@ -12,8 +12,8 @@ export default function LocationSection() {
   const address = "경기도 용인시 수지구 동천로 425-2"
 
   // 고정 좌표 (직접 확인한 정확한 위도/경도)
-  const fixedLat = 37.342472  // 정확한 값으로 수정하세요
-  const fixedLng = 127.060079  // 정확한 값으로 수정하세요
+  const fixedLat = 37.342974  // 정확한 값으로 수정하세요
+  const fixedLng = 127.060407  // 정확한 값으로 수정하세요
 
   useEffect(() => {
     let isCancelled = false
@@ -90,57 +90,37 @@ export default function LocationSection() {
   }
 
   const openNavigation = (type: string) => {
-    const encodedAddress = encodeURIComponent(address);
-    const destination = "더포레스트웨딩"; 
-    const isMobile = /Android|iPhone|iPod|iPad/.test(navigator.userAgent);
-  
-    const openWebFallback = (url: string) => {
-      window.open(url, "_blank");
-    };
-  
-    if (type === "naver") {
-      if (isMobile) {
-        const timeout = setTimeout(() => {
-          // 앱 없으면 웹 fallback
-          openWebFallback(`https://map.naver.com/v5/search/${encodedAddress}`);
-        }, 2000);
-        window.location.href = `nmap://place?lat=${fixedLat}&lng=${fixedLng}&name=${encodeURIComponent(destination)}&appname=your_app_name`;
-        const handleVisibilityChange = () => {
-          if (document.hidden) clearTimeout(timeout);
-        };
-        document.addEventListener("visibilitychange", handleVisibilityChange, { once: true });
-      } else {
-        openWebFallback(`https://map.naver.com/v5/search/${encodedAddress}`);
-      }
-    } else if (type === "kakao") {
-      if (isMobile) {
-        const timeout = setTimeout(() => {
-          openWebFallback(`https://map.kakao.com/link/search/${encodedAddress}`);
-        }, 2000);
-        window.location.href = `kakaomap://look?p=${fixedLat},${fixedLng}`;
-        const handleVisibilityChange = () => {
-          if (document.hidden) clearTimeout(timeout);
-        };
-        document.addEventListener("visibilitychange", handleVisibilityChange, { once: true });
-      } else {
-        openWebFallback(`https://map.kakao.com/link/search/${encodedAddress}`);
-      }
-    } else if (type === "google") {
-      if (isMobile) {
-        const timeout = setTimeout(() => {
-          openWebFallback(`https://www.google.com/maps/search/${encodedAddress}`);
-        }, 2000);
-        window.location.href = `comgooglemaps://?q=${encodedAddress}`;
-        const handleVisibilityChange = () => {
-          if (document.hidden) clearTimeout(timeout);
-        };
-        document.addEventListener("visibilitychange", handleVisibilityChange, { once: true });
-      } else {
-        openWebFallback(`https://www.google.com/maps/search/${encodedAddress}`);
-      }
+    const encodedAddress = encodeURIComponent(address)
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+
+    switch (type) {
+      case "naver":
+        window.open(`https://map.naver.com/v5/search/${encodedAddress}`)
+        break
+      case "kakao":
+        if (isMobile) {
+          // 모바일에서는 카카오맵 앱 딥링크 사용
+          const kakaoMapUrl = `kakaomap://look?p=${fixedLat},${fixedLng}`
+          const webUrl = `https://map.kakao.com/link/to/더포레스트웨딩,${fixedLat},${fixedLng}`
+          
+          // 앱이 설치되어 있으면 앱으로, 없으면 웹으로
+          window.location.href = kakaoMapUrl
+          
+          // 앱이 없을 경우를 대비해 3초 후 웹으로 리다이렉트
+          setTimeout(() => {
+            window.location.href = webUrl
+          }, 3000)
+        } else {
+          // PC에서는 주소 검색 링크 사용
+          window.open(`https://map.kakao.com/link/search/${encodedAddress}`)
+        }
+        break
+      case "google":
+        window.open(`https://maps.google.com/maps?q=${encodedAddress}`)
+        break
     }
-  };
-  
+  }
+
   return (
     <section className="px-6 bg-wedding-light">
       <motion.div
