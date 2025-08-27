@@ -15,10 +15,10 @@ export default function SecurityProvider({ children }: { children: React.ReactNo
         }
 
         // Ctrl+Shift+I (개발자 도구)
-        // if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-        //   e.preventDefault()
-        //   return false
-        // }
+        if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+          e.preventDefault()
+          return false
+        }
         // Ctrl+Shift+C (요소 검사)
         if (e.ctrlKey && e.shiftKey && e.key === 'C') {
           e.preventDefault()
@@ -30,10 +30,10 @@ export default function SecurityProvider({ children }: { children: React.ReactNo
           return false
         }
         // F12 (개발자 도구)
-        // if (e.key === 'F12') {
-        //   e.preventDefault()
-        //   return false
-        // }
+        if (e.key === 'F12') {
+          e.preventDefault()
+          return false
+        }
         // Ctrl+Shift+J (콘솔)
         if (e.ctrlKey && e.shiftKey && e.key === 'J') {
           e.preventDefault()
