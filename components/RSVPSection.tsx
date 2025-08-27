@@ -52,6 +52,7 @@ export default function RSVPSection() {
       // 전송 완료
       setModalMessage("참석의사 전달이 완료되었습니다.")
       setIsSuccessModal(true)
+      setShowModal(false);
     } catch (err) {
       console.error(err)
       setModalMessage("네트워크 오류가 발생했습니다. 다시 시도해주세요.")
