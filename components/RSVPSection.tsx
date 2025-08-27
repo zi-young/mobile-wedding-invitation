@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { X, Check } from "lucide-react"
-import { supabase } from "@/lib/supabaseClient" 
 
 export default function RSVPSection() {
   const [showModal, setShowModal] = useState(true)
@@ -42,33 +41,14 @@ export default function RSVPSection() {
     setShowModal(false)
 
     try {
-      // Supabase에 데이터 삽입
-      const { data, error } = await supabase.from("rsvp").insert([
-        {
-          attendance: formData.attendance === "true",
-          side: formData.side,
-          name: formData.name,
-          guests: Number(formData.guestCount),
-          message: formData.companionName || null,
-        },
-      ])
-
-      console.log("Supabase insert response:", { data, error });
-      if (error) {
-        console.error(error)
-        showAlertModal("전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.", false)
-      } else {
-        showAlertModal("참석의사를 전달 완료했습니다.", true)
-        // 입력값 초기화
-        setFormData({
-          attendance: "true",
-          side: "groom",
-          name: "",
-          guestCount: "1",
-          companionName: "",
-          agreed: false,
-        })
-      }
+      const res = await fetch("/api/rsvp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || "전송 실패");
+      
     } catch (err) {
       console.error(err)
       showAlertModal("네트워크 오류가 발생했습니다. 다시 시도해주세요.", false)

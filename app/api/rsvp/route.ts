@@ -1,18 +1,23 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@supabase/supabase-js";
+
+// 서버 전용 Supabase 클라이언트
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY! // 서버에서만 사용
+);
 
 export async function POST(req: Request) {
   try {
     const data = await req.json();
 
-    const { error } = await supabase.from("rsvp").insert([ 
+    const { error } = await supabase.from("rsvp").insert([
       {
-        attendance: data.attendance === "true", // 컬럼 이름 일치
+        attendance: data.attendance === "true",
         side: data.side,
         name: data.name,
-        guests: Number(data.guestCount), // 'guest_count' -> 'guests'로 수정
-        message: data.companionName || null, // 'companion_name' -> 'message'로 수정
-        // Supabase에서 created_at은 기본값이 자동 설정되므로 코드로 보낼 필요 없음
+        guests: Number(data.guestCount),
+        message: data.companionName || null,
       },
     ]);
 
