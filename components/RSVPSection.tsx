@@ -247,11 +247,23 @@ export default function RSVPSection() {
             <p className="mb-6 text-wedding-primary">{modalMessage}</p>
             {!isSubmitting && (
               <button
-                onClick={() => setModalMessage("")}
-                className="px-6 py-2 rounded-lg bg-wedding-primary text-wedding-white hover:bg-wedding-secondary"
-              >
-                확인
-              </button>
+              onClick={() => {
+                setModalMessage("")
+                // 전송 완료 후 모달 닫을 때 폼 초기화
+                setFormData({
+                  attendance: "true",
+                  side: "groom",
+                  name: "",
+                  guestCount: "1",
+                  companionName: "",
+                  agreed: false,
+                })
+                setShowModal(false) // 모달 닫기
+              }}
+              className="px-6 py-2 rounded-lg bg-wedding-primary text-wedding-white hover:bg-wedding-secondary"
+            >
+              확인
+            </button>
             )}
           </div>
         </div>
