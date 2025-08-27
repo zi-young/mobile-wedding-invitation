@@ -7,7 +7,7 @@ import { X, Check } from "lucide-react"
 export default function RSVPSection() {
   const [showModal, setShowModal] = useState(true)
   const [modalMessage, setModalMessage] = useState("")
-  const [isSuccessModal, setIsSuccessModal] = useState(false)
+  const [isSuccessModal, setIsSuccessModal] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     attendance: "true",
@@ -18,40 +18,44 @@ export default function RSVPSection() {
     agreed: false,
   })
 
-  const showAlertModal = (message: string, isSuccess: boolean) => {
-    setModalMessage(message)
-    setIsSuccessModal(isSuccess)
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!formData.name.trim()) {
-      showAlertModal("참석자 성함을 입력해주세요.", false)
+      setModalMessage("참석자 성함을 입력해주세요.")
+      setIsSuccessModal(false)
+      setShowModal(true)
       return
     }
     if (!formData.agreed) {
-      showAlertModal("개인정보 수집 및 이용에 동의해주세요.", false)
+      setModalMessage("개인정보 수집 및 이용에 동의해주세요.")
+      setIsSuccessModal(false)
+      setShowModal(true)
       return
     }
 
-    // UI 반응
+    // 전송 중 상태
     setIsSubmitting(true)
-    showAlertModal("참석의사 전달 중...", true)
-    setShowModal(false)
+    setShowModal(true)
+    setModalMessage("참석의사 전달 중...")
+    setIsSuccessModal(true)
 
     try {
       const res = await fetch("/api/rsvp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-      });
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.error || "전송 실패");
-      
+      })
+      const result = await res.json()
+      if (!res.ok) throw new Error(result.error || "전송 실패")
+
+      // 전송 완료
+      setModalMessage("참석의사 전달이 완료되었습니다.")
+      setIsSuccessModal(true)
     } catch (err) {
       console.error(err)
-      showAlertModal("네트워크 오류가 발생했습니다. 다시 시도해주세요.", false)
+      setModalMessage("네트워크 오류가 발생했습니다. 다시 시도해주세요.")
+      setIsSuccessModal(false)
     } finally {
       setIsSubmitting(false)
     }
@@ -110,6 +114,7 @@ export default function RSVPSection() {
                 </button>
               </div>
 
+              {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* 참석 가능 여부 */}
                 <div>
@@ -204,7 +209,6 @@ export default function RSVPSection() {
                     개인정보 수집 및 이용 동의(필수) <span className="text-red-500">*</span>
                   </div>
                   <p className="mb-3 text-xs text-wedding-secondary">
-                    참석여부 전달을 위한 개인정보 수집 및 이용에 동의해주세요.<br />
                     항목: 성함,연락처,동행인 성함 · 보유기간: 청첩장 이용 종료시 까지
                   </p>
                   <label className="flex items-center">

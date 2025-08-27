@@ -1,23 +1,18 @@
+// app/api/rsvp/route.ts
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-// 서버 전용 Supabase 클라이언트
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY! // 서버에서만 사용
-);
+import { supabaseServer } from "@/lib/supabaseClient";
 
 export async function POST(req: Request) {
   try {
     const data = await req.json();
 
-    const { error } = await supabase.from("rsvp").insert([
+    const { error } = await supabaseServer.from("rsvp").insert([
       {
         attendance: data.attendance === "true",
         side: data.side,
         name: data.name,
-        guests: Number(data.guestCount),
-        message: data.companionName || null,
+        guest_count: Number(data.guestCount),
+        companion_name: data.companionName || null,
       },
     ]);
 
