@@ -5,10 +5,14 @@ import { motion } from "framer-motion"
 import { X, Check } from "lucide-react"
 
 export default function RSVPSection() {
-  const [showModal, setShowModal] = useState(true)
-  const [modalMessage, setModalMessage] = useState("")
-  const [isSuccessModal, setIsSuccessModal] = useState(true)
+  // RSVP 폼 모달
+  const [showRSVPModal, setShowRSVPModal] = useState(true)
+  // Alert 모달
+  const [showAlertModal, setShowAlertModal] = useState(false)
+  const [alertMessage, setAlertMessage] = useState("")
+  const [isSuccessAlert, setIsSuccessAlert] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
   const [formData, setFormData] = useState({
     attendance: "true",
     side: "groom",
@@ -21,24 +25,25 @@ export default function RSVPSection() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    // 입력 검증
     if (!formData.name.trim()) {
-      setModalMessage("참석자 성함을 입력해주세요.")
-      setIsSuccessModal(false)
-      setShowModal(true)
+      setAlertMessage("참석자 성함을 입력해주세요.")
+      setIsSuccessAlert(false)
+      setShowAlertModal(true)
       return
     }
     if (!formData.agreed) {
-      setModalMessage("개인정보 수집 및 이용에 동의해주세요.")
-      setIsSuccessModal(false)
-      setShowModal(true)
+      setAlertMessage("개인정보 수집 및 이용에 동의해주세요.")
+      setIsSuccessAlert(false)
+      setShowAlertModal(true)
       return
     }
 
-    // 전송 중 상태
+    // 전송 중
     setIsSubmitting(true)
-    setShowModal(true)
-    setModalMessage("참석의사 전달 중...")
-    setIsSuccessModal(true)
+    setAlertMessage("참석의사 전달 중...")
+    setIsSuccessAlert(true)
+    setShowAlertModal(true)
 
     try {
       const res = await fetch("/api/rsvp", {
@@ -50,13 +55,12 @@ export default function RSVPSection() {
       if (!res.ok) throw new Error(result.error || "전송 실패")
 
       // 전송 완료
-      setModalMessage("참석의사 전달이 완료되었습니다.")
-      setIsSuccessModal(true)
-      setShowModal(false);
+      setAlertMessage("참석의사 전달이 완료되었습니다.")
+      setIsSuccessAlert(true)
     } catch (err) {
       console.error(err)
-      setModalMessage("네트워크 오류가 발생했습니다. 다시 시도해주세요.")
-      setIsSuccessModal(false)
+      setAlertMessage("네트워크 오류가 발생했습니다. 다시 시도해주세요.")
+      setIsSuccessAlert(false)
     } finally {
       setIsSubmitting(false)
     }
@@ -66,6 +70,24 @@ export default function RSVPSection() {
     const { name, value, type, checked } = e.target as HTMLInputElement
     const newValue = type === "checkbox" ? checked : value
     setFormData(prev => ({ ...prev, [name]: newValue }))
+  }
+
+  const handleAlertClose = () => {
+    setShowAlertModal(false)
+    setAlertMessage("")
+
+    if (isSuccessAlert) {
+      // 성공 모달일 경우 폼 초기화 후 RSVP 모달 닫기
+      setFormData({
+        attendance: "true",
+        side: "groom",
+        name: "",
+        guestCount: "1",
+        companionName: "",
+        agreed: false,
+      })
+      setShowRSVPModal(false)
+    }
   }
 
   return (
@@ -94,7 +116,7 @@ export default function RSVPSection() {
         className="text-center"
       >
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => setShowRSVPModal(true)}
           className="inline-flex items-center px-6 py-3 space-x-2 transition-colors border rounded-lg bg-wedding-white border-wedding-primary hover:bg-wedding-primary hover:text-wedding-white text-wedding-primary"
           disabled={isSubmitting}
         >
@@ -104,13 +126,13 @@ export default function RSVPSection() {
       </motion.div>
 
       {/* RSVP Form Modal */}
-      {showModal && (
+      {showRSVPModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
           <div className="bg-wedding-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-wedding-primary">참석 의사 전달</h3>
-                <button onClick={() => setShowModal(false)} className="p-1 rounded-full hover:bg-wedding-light">
+                <button onClick={() => setShowRSVPModal(false)} className="p-1 rounded-full hover:bg-wedding-light">
                   <X className="w-5 h-5 text-wedding-primary" />
                 </button>
               </div>
@@ -238,32 +260,20 @@ export default function RSVPSection() {
       )}
 
       {/* Alert Modal */}
-      {modalMessage && (
+      {showAlertModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
           <div className="w-full max-w-sm p-6 text-center rounded-lg shadow-lg bg-wedding-white">
-            <h4 className={`text-lg font-bold mb-4 ${isSuccessModal ? 'text-green-600' : 'text-red-600'}`}>
-              {isSuccessModal ? "알림" : "오류"}
+            <h4 className={`text-lg font-bold mb-4 ${isSuccessAlert ? 'text-green-600' : 'text-red-600'}`}>
+              {isSuccessAlert ? "알림" : "오류"}
             </h4>
-            <p className="mb-6 text-wedding-primary">{modalMessage}</p>
+            <p className="mb-6 text-wedding-primary">{alertMessage}</p>
             {!isSubmitting && (
               <button
-              onClick={() => {
-                setModalMessage("")
-                // 전송 완료 후 모달 닫을 때 폼 초기화
-                setFormData({
-                  attendance: "true",
-                  side: "groom",
-                  name: "",
-                  guestCount: "1",
-                  companionName: "",
-                  agreed: false,
-                })
-                setShowModal(false) // 모달 닫기
-              }}
-              className="px-6 py-2 rounded-lg bg-wedding-primary text-wedding-white hover:bg-wedding-secondary"
-            >
-              확인
-            </button>
+                onClick={handleAlertClose}
+                className="px-6 py-2 rounded-lg bg-wedding-primary text-wedding-white hover:bg-wedding-secondary"
+              >
+                확인
+              </button>
             )}
           </div>
         </div>
