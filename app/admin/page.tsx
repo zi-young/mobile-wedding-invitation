@@ -1,3 +1,7 @@
+// app/admin/page.tsx
+export const dynamic = 'force-dynamic'; // 프리렌더 금지
+export const revalidate = 0;            // 캐시 안 함(선택)
+
 import { supabaseServer } from "@/lib/supabaseClient";
 
 interface RSVP {

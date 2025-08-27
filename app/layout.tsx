@@ -2,7 +2,6 @@ import type React from "react"
 import { Noto_Sans_KR } from 'next/font/google'
 import "./globals.css"
 import SecurityProvider from "@/components/SecurityProvider"
-import Head from "next/head"
 
 // Noto Sans KR 폰트 설정
 const notoSansKr = Noto_Sans_KR({
@@ -34,7 +33,6 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${notoSansKr.variable}`}>
       <head>
-        <Head>
           {/* 확대 방지 */}
           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
           {/* 캡처 방지 */}
@@ -45,7 +43,6 @@ export default function RootLayout({
               user-select: none;
             }
           `}</style>
-        </Head>
       </head>
       <body className="font-sans antialiased">
         <SecurityProvider>
