@@ -4,8 +4,8 @@
     functions = "netlify/functions"
 
 [build.environment]
-    NEXT_PUBLIC_SUPABASE_URL=https://uhyobanhfjhazvvtxzpy.supabase.co
-    NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVoeW9iYW5oZmpoYXp2dnR4enB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYxNzQ3MjEsImV4cCI6MjA3MTc1MDcyMX0.2HNMRxks5jT2WTgfmv4aEWcKQgfTEkQTgqITmn7Fj4g
+    NEXT_PUBLIC_SUPABASE_URL="https://uhyobanhfjhazvvtxzpy.supabase.co"
+    NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVoeW9iYW5oZmpoYXp2dnR4enB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYxNzQ3MjEsImV4cCI6MjA3MTc1MDcyMX0.2HNMRxks5jT2WTgfmv4aEWcKQgfTEkQTgqITmn7Fj4g"
 
 [[plugins]]
     package = "@netlify/plugin-nextjs"
