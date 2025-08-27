@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { X, Check } from "lucide-react"
+import { supabase } from "@/lib/supabaseClient" 
 
 export default function RSVPSection() {
   const [showModal, setShowModal] = useState(true)
@@ -23,7 +24,7 @@ export default function RSVPSection() {
     setIsSuccessModal(isSuccess)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!formData.name.trim()) {
@@ -35,57 +36,45 @@ export default function RSVPSection() {
       return
     }
 
-    // 1️⃣ 즉시 UI 반응
+    // UI 반응
     setIsSubmitting(true)
     showAlertModal("참석의사 전달 중...", true)
-    setShowModal(false) // 모달 닫기
+    setShowModal(false)
 
-    // 2️⃣ 백그라운드 전송 (타임아웃 설정)
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 15000) // 15초 타임아웃
+    try {
+      // Supabase에 데이터 삽입
+      const { data, error } = await supabase.from("rsvp").insert([
+        {
+          attendance: formData.attendance === "true",
+          side: formData.side,
+          name: formData.name,
+          guests: Number(formData.guestCount),
+          message: formData.companionName || null,
+        },
+      ])
 
-    fetch("/api/rsvp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-      signal: controller.signal,
-    })
-      .then(res => {
-        clearTimeout(timeoutId)
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`)
-        }
-        return res.text()
-      })
-      .then(text => {
-        console.log("GAS 응답:", text)
-        if (text.includes("success")) {
-          showAlertModal("참석의사를 전달 완료했습니다.", true)
-          setFormData({
-            attendance: "true",
-            side: "groom",
-            name: "",
-            guestCount: "1",
-            companionName: "",
-            agreed: false,
-          })
-        } else {
-          showAlertModal("전송에 실패했습니다. 잠시 후 다시 시도해주세요.", false)
-        }
-      })
-      .catch(err => {
-        clearTimeout(timeoutId)
-        console.error(err)
-        
-        if (err.name === 'AbortError') {
-          showAlertModal("전송 시간이 초과되었습니다. 네트워크 상태를 확인하고 다시 시도해주세요.", false)
-        } else if (err.message.includes('Failed to fetch')) {
-          showAlertModal("네트워크 연결에 실패했습니다. 인터넷 연결을 확인해주세요.", false)
-        } else {
-          showAlertModal("전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.", false)
-        }
-      })
-      .finally(() => setIsSubmitting(false))
+      console.log("Supabase insert response:", { data, error });
+      if (error) {
+        console.error(error)
+        showAlertModal("전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.", false)
+      } else {
+        showAlertModal("참석의사를 전달 완료했습니다.", true)
+        // 입력값 초기화
+        setFormData({
+          attendance: "true",
+          side: "groom",
+          name: "",
+          guestCount: "1",
+          companionName: "",
+          agreed: false,
+        })
+      }
+    } catch (err) {
+      console.error(err)
+      showAlertModal("네트워크 오류가 발생했습니다. 다시 시도해주세요.", false)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

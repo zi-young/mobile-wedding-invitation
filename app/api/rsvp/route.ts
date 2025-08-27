@@ -1,19 +1,29 @@
 import { NextResponse } from "next/server";
+import { supabase } from "@/lib/supabaseClient";
 
 export async function POST(req: Request) {
   try {
     const data = await req.json();
 
-    const res = await fetch("https://script.google.com/macros/s/AKfycbwdNsLdye4YbSxaKQPeA6rnvNndoiEP79hpe5ogE7UraS1rYn8ekVEH1nQdfhHyFMLDfQ/exec", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    const { error } = await supabase.from("rsvp").insert([ 
+      {
+        attendance: data.attendance === "true", // 컬럼 이름 일치
+        side: data.side,
+        name: data.name,
+        guests: Number(data.guestCount), // 'guest_count' -> 'guests'로 수정
+        message: data.companionName || null, // 'companion_name' -> 'message'로 수정
+        // Supabase에서 created_at은 기본값이 자동 설정되므로 코드로 보낼 필요 없음
+      },
+    ]);
 
-    const text = await res.text();
-    return NextResponse.json({ status: res.status, body: text }, { status: res.status });
-  } catch (error) {
-    console.error("Proxy error:", error);
-    return NextResponse.json({ error: "Proxy error" }, { status: 500 });
+    if (error) {
+      console.error(error);
+      return NextResponse.json({ error: "DB 저장 실패" }, { status: 500 });
+    }
+
+    return NextResponse.json({ message: "RSVP 저장 완료" });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ error: "서버 오류" }, { status: 500 });
   }
 }
