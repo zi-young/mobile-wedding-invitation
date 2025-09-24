@@ -1,8 +1,7 @@
-// app/admin/page.tsx
-export const dynamic = 'force-dynamic'; // 프리렌더 금지
-export const revalidate = 0;            // 캐시 안 함(선택)
+'use client';
 
-import { supabaseServer } from "@/lib/supabaseClient";
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabaseClient'; // anon key로 만든 클라이언트
 
 interface RSVP {
   id: number;
@@ -14,19 +13,32 @@ interface RSVP {
   created_at: string;
 }
 
-export default async function AdminPage() {
-  const { data: rsvps, error } = await supabaseServer
-    .from<"rsvp", RSVP>("rsvp")
-    .select("*")
-    .order("created_at", { ascending: false });
+export default function AdminPage() {
+  const [rows, setRows] = useState<RSVP[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState<string | null>(null);
 
-  if (error) {
-    return <p className="text-red-600">데이터 조회 오류: {error.message}</p>;
-  }
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data, error } = await supabase
+          .from('rsvp')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-  if (!rsvps || rsvps.length === 0) {
-    return <p className="p-8">아직 RSVP 데이터가 없습니다.</p>;
-  }
+        if (error) throw error;
+        setRows((data as RSVP[]) ?? []);
+      } catch (e: any) {
+        setErr(e.message);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  if (loading) return <p className="p-8">불러오는 중...</p>;
+  if (err) return <p className="p-8 text-red-600">오류: {err}</p>;
+  if (rows.length === 0) return <p className="p-8">아직 RSVP 데이터가 없습니다.</p>;
 
   return (
     <div className="min-h-screen p-8 bg-wedding-light">
@@ -44,17 +56,13 @@ export default async function AdminPage() {
             </tr>
           </thead>
           <tbody>
-            {rsvps.map((rsvp) => (
+            {rows.map((rsvp) => (
               <tr key={rsvp.id} className="text-center">
                 <td className="px-4 py-2 border">{rsvp.name}</td>
-                <td className="px-4 py-2 border">
-                  {rsvp.attendance ? "참석" : "불참"}
-                </td>
-                <td className="px-4 py-2 border">
-                  {rsvp.side === "groom" ? "신랑측" : "신부측"}
-                </td>
+                <td className="px-4 py-2 border">{rsvp.attendance ? '참석' : '불참'}</td>
+                <td className="px-4 py-2 border">{rsvp.side === 'groom' ? '신랑측' : '신부측'}</td>
                 <td className="px-4 py-2 border">{rsvp.guests}</td>
-                <td className="px-4 py-2 border">{rsvp.message || "-"}</td>
+                <td className="px-4 py-2 border">{rsvp.message || '-'}</td>
                 <td className="px-4 py-2 border">
                   {new Date(rsvp.created_at).toLocaleString()}
                 </td>
