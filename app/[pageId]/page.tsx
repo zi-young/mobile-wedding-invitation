@@ -1,4 +1,4 @@
-import WeddingInvitationContent from "../../WeddingInvitationContent"
+import WeddingInvitationContent from "../WeddingInvitationContent"
 
 export default function Page({ params }: { params: { pageId: string } }) {
 
