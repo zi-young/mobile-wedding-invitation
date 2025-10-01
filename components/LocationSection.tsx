@@ -2,18 +2,19 @@
 
 import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
-import { MapPin, Navigation, Car, Train, Bus } from "lucide-react"
+import { MapPin, Navigation, Car, Train, Bus, Copy, Check } from "lucide-react"
 
 export default function LocationSection() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
   const [mapLoadError, setMapLoadError] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
 
   const NAVER_MAP_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID
   const address = "경기도 용인시 수지구 동천로 425-2"
 
   // 고정 좌표 (직접 확인한 정확한 위도/경도)
-  const fixedLat = 37.342974  // 정확한 값으로 수정하세요
-  const fixedLng = 127.060407  // 정확한 값으로 수정하세요
+  const fixedLat = 37.3429391  // 업데이트된 위도
+  const fixedLng = 127.0603774  // 업데이트된 경도
 
   useEffect(() => {
     let isCancelled = false
@@ -99,26 +100,40 @@ export default function LocationSection() {
         break
       case "kakao":
         if (isMobile) {
-          // 모바일에서는 카카오맵 앱 딥링크 사용
-          const kakaoMapUrl = `kakaomap://look?p=${fixedLat},${fixedLng}`
-          const webUrl = `https://map.kakao.com/link/to/더포레스트웨딩,${fixedLat},${fixedLng}`
-          
-          // 앱이 설치되어 있으면 앱으로, 없으면 웹으로
-          window.location.href = kakaoMapUrl
-          
-          // 앱이 없을 경우를 대비해 3초 후 웹으로 리다이렉트
+          const kakaoAppUrl = `kakaomap://search?q=${encodeURIComponent(address)}`
+          const kakaoWebUrl = `https://map.kakao.com/link/search/${encodeURIComponent(address)}`
+          window.location.href = kakaoAppUrl
           setTimeout(() => {
-            window.location.href = webUrl
+            window.location.href = kakaoWebUrl
           }, 3000)
         } else {
-          // PC에서는 주소 검색 링크 사용
           window.open(`https://map.kakao.com/link/search/${encodedAddress}`)
         }
         break
-      case "google":
-        window.open(`https://maps.google.com/maps?q=${encodedAddress}`)
+      case "tmap":
+        if (isMobile) {
+          const tmapAppUrl = `tmap://route?goalx=${fixedLng}&goaly=${fixedLat}&goalname=${encodeURIComponent("더포레스트웨딩")}`
+          const iosStoreUrl = "https://apps.apple.com/kr/app/t-map-for-all/id431589174"
+          const androidStoreUrl = "https://play.google.com/store/apps/details?id=com.skt.tmap.ku"
+          const storeUrl = /iPhone|iPad|iPod/i.test(navigator.userAgent) ? iosStoreUrl : androidStoreUrl
+
+          window.location.href = tmapAppUrl
+          setTimeout(() => {
+            window.location.href = storeUrl
+          }, 2000)
+        } else {
+          // PC 환경에서 팝업 표시
+          alert("티맵은 모바일 환경에서만 사용할 수 있습니다. 모바일 기기에서 확인해주세요.")
+        }
         break
     }
+  }
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(address).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000) // 2초 후 복사 상태 초기화
+    })
   }
 
   return (
@@ -141,7 +156,19 @@ export default function LocationSection() {
         className="mb-6 text-center"
       >
         <div className="mb-2 text-lg font-semibold text-wedding-secondary">용인 더 포레스트 웨딩</div>
-        <div className="text-wedding-primary">{address}</div>
+        <div className="flex items-center justify-center space-x-2">
+          <div className="text-wedding-primary">{address}</div>
+          <button
+            onClick={copyToClipboard}
+            className="p-2 transition-colors rounded-full hover:bg-wedding-light"
+          >
+            {copied ? (
+              <Check className="w-5 h-5 text-wedding-primary" />
+            ) : (
+              <Copy className="w-5 h-5 text-wedding-secondary" />
+            )}
+          </button>
+        </div>
       </motion.div>
 
       <motion.div
@@ -187,10 +214,10 @@ export default function LocationSection() {
               카카오맵
             </button>
             <button
-              onClick={() => openNavigation("google")}
+              onClick={() => openNavigation("tmap")}
               className="flex-1 px-4 py-2 text-[15px] font-medium text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700"
             >
-              구글맵
+              티맵
             </button>
           </div>
         </div>
