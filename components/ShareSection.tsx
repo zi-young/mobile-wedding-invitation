@@ -33,12 +33,14 @@ export default function ShareSection() {
       return
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com"
-    const imageUrl = `${siteUrl}/kakao_img.jpg` // 반드시 절대 URL 사용
+    const siteUrl = "https://hm-invite.netlify.app"
 
-    const path = window.location.pathname
-    const version = path.startsWith('/1') ? '1' : path.startsWith('/2') ? '2' : path.startsWith('/3') ? '3' : ''
-    const versionUrl = `${siteUrl}${version ? '/' + version : ''}`
+    // 현재 경로 그대로 반영
+    const currentPath = window.location.pathname
+    const versionUrl = `${siteUrl}${currentPath}`
+
+    // 캐시 방지용 timestamp
+    const imageUrl = `${siteUrl}/kakao_img.jpg?t=${new Date().getTime()}`
 
     window.Kakao.Share.sendDefault({
       objectType: "feed",
