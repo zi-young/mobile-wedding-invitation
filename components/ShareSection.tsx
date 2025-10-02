@@ -1,12 +1,13 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { MessageCircle } from "lucide-react"
 
 export default function ShareSection() {
+  const [kakaoLoaded, setKakaoLoaded] = useState(false)
+
   useEffect(() => {
-    // 카카오 SDK 로드
     if (!window.Kakao) {
       const script = document.createElement("script")
       script.src = "https://developers.kakao.com/sdk/js/kakao.min.js"
@@ -15,27 +16,29 @@ export default function ShareSection() {
         if (!window.Kakao.isInitialized()) {
           window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY)
         }
+        setKakaoLoaded(true)
       }
       document.body.appendChild(script)
     } else {
       if (!window.Kakao.isInitialized()) {
         window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY)
       }
+      setKakaoLoaded(true)
     }
   }, [])
 
   const shareToKakao = () => {
-    if (!window.Kakao) {
-      alert("카카오 SDK가 로드되지 않았습니다.")
+    if (!kakaoLoaded || !window.Kakao) {
+      alert("카카오 SDK가 아직 준비되지 않았습니다.")
       return
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-    const imageUrl = `${siteUrl}/kakao_img.jpg` // public 폴더 안 이미지
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com"
+    const imageUrl = `${siteUrl}/kakao_img.jpg` // 반드시 절대 URL 사용
 
-    const path = window.location.pathname; // 현재 path
-    const version = path.startsWith('/1') ? '1' : path.startsWith('/2') ? '2' : path.startsWith('/3') ? '3' : '';
-    const versionUrl = `${siteUrl}${version ? '/' + version : ''}`;    
+    const path = window.location.pathname
+    const version = path.startsWith('/1') ? '1' : path.startsWith('/2') ? '2' : path.startsWith('/3') ? '3' : ''
+    const versionUrl = `${siteUrl}${version ? '/' + version : ''}`
 
     window.Kakao.Share.sendDefault({
       objectType: "feed",
@@ -71,7 +74,8 @@ export default function ShareSection() {
       >
         <button
           onClick={shareToKakao}
-          className="inline-flex items-center px-6 py-3 space-x-2 font-medium transition-colors rounded-lg text-wedding-white bg-wedding-primary hover:bg-wedding-secondary"
+          disabled={!kakaoLoaded}
+          className="inline-flex items-center px-6 py-3 space-x-2 font-medium transition-colors rounded-lg text-wedding-white bg-wedding-primary hover:bg-wedding-secondary disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <MessageCircle className="w-5 h-5" />
           <span>카카오톡으로 초대장 보내기</span>
