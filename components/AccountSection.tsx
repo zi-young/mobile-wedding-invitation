@@ -33,7 +33,11 @@ export default function AccountSection({ currentPageIdentifier }: AccountSection
       ],
     }
   } else if (currentPageIdentifier === "2") {
-    accounts = {} 
+    accounts = {
+      groom: [
+        { name: "우만경", bank: "농협", number: "356-0663-7824-43" },
+      ],
+    }
   } else {
     accounts = {
       bride: [
@@ -123,42 +127,44 @@ export default function AccountSection({ currentPageIdentifier }: AccountSection
 
           </div>
         )}
-        {/* Bride Side */}
-        <div className="overflow-hidden border rounded-lg border-wedding-primary/20">
-          <button
-            onClick={toggleBride}
-            className="flex items-center justify-between w-full px-4 py-3 transition-colors hover:bg-wedding-light/30"
-          >
-            <span className="text-base font-medium text-wedding-primary">신부측</span>
-            <ChevronDown className={`w-5 h-5 transition-transform text-wedding-primary ${brideOpen ? "rotate-180" : ""}`} />
-          </button>
-          {brideOpen && (
-            <div className="border-t border-wedding-primary/20">
-              {brideOpen && accounts.bride?.map((account, index) => (
-                <div key={index} className="px-4 py-3 border-b border-wedding-primary/10 last:border-b-0">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <span className="text-base font-medium text-wedding-primary">{account.name}</span>
-                      <span className="text-base text-wedding-secondary">
-                        {account.bank} {account.number}
-                      </span>
+        {/* Bride Side — currentPageIdentifier가 "2"일 때는 숨김 */}
+        {currentPageIdentifier !== "2" && (
+          <div className="overflow-hidden border rounded-lg border-wedding-primary/20">
+            <button
+              onClick={toggleBride}
+              className="flex items-center justify-between w-full px-4 py-3 transition-colors hover:bg-wedding-light/30"
+            >
+              <span className="text-base font-medium text-wedding-primary">신부측</span>
+              <ChevronDown className={`w-5 h-5 transition-transform text-wedding-primary ${brideOpen ? "rotate-180" : ""}`} />
+            </button>
+            {brideOpen && (
+              <div className="border-t border-wedding-primary/20">
+                {accounts.bride?.map((account, index) => (
+                  <div key={index} className="px-4 py-3 border-b border-wedding-primary/10 last:border-b-0">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <span className="text-base font-medium text-wedding-primary">{account.name}</span>
+                        <span className="text-base text-wedding-secondary">
+                          {account.bank} {account.number}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => copyToClipboard(`${account.bank} ${account.number}`, `bride-${index}`)}
+                        className="p-2 transition-colors rounded-full hover:bg-wedding-light"
+                      >
+                        {copiedAccount === `bride-${index}` ? (
+                          <Check className="w-4 h-4 text-wedding-primary" />
+                        ) : (
+                          <Copy className="w-4 h-4 text-wedding-secondary" />
+                        )}
+                      </button>
                     </div>
-                    <button
-                      onClick={() => copyToClipboard(`${account.bank} ${account.number}`, `bride-${index}`)}
-                      className="p-2 transition-colors rounded-full hover:bg-wedding-light"
-                    >
-                      {copiedAccount === `bride-${index}` ? (
-                        <Check className="w-4 h-4 text-wedding-primary" />
-                      ) : (
-                        <Copy className="w-4 h-4 text-wedding-secondary" />
-                      )}
-                    </button>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </motion.div>
     </section>
   )

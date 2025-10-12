@@ -23,7 +23,10 @@ export default function WeddingInvitationContent({ currentPageIdentifier }: { cu
     )
   }
 
-  const shouldRenderAccountSection = currentPageIdentifier === "1" || currentPageIdentifier === "3"
+  const shouldRenderAccountSection =
+  currentPageIdentifier === "1" ||
+  currentPageIdentifier === "2" ||
+  currentPageIdentifier === "3"
 
   return (
     <div className="min-h-screen font-sans bg-background">
